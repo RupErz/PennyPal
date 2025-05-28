@@ -15,6 +15,8 @@ import Welcome from './screens/OnBoard/Welcome';
 import GetName from './screens/OnBoard/GetName';
 import GetIncome from './screens/OnBoard/GetIncome';
 import GetReady from './screens/OnBoard/GetReady';
+import Benefits from './screens/OnBoard/Benefits';
+import { Colors } from './constants/colors';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -87,10 +89,19 @@ const MainAppTabs = () => {
 
 const OnBoardingStack = ({setHasOnBoarded}) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{ 
+        headerShown: false ,
+        contentStyle: { backgroundColor: Colors.background}
+      }}
+    >
       <Stack.Screen 
         name='WelcomeScreen'
         component={Welcome}
+      />
+      <Stack.Screen
+        name='BenefitsScreen'
+        component={Benefits}
       />
       <Stack.Screen 
         name='GetNameScreen'
@@ -114,6 +125,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar style='light' />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasOnBoarded ? (
           <Stack.Screen
