@@ -15,7 +15,9 @@ const GetName = ({route, navigation}) => {
                 <Title>May we know your name ?</Title>
             </View>
             <Input />
-            <PrimaryButton>Next</PrimaryButton>
+            <View style={styles.buttonContainer}>
+                <PrimaryButton>Next</PrimaryButton>
+            </View>
         </View>
     )
 }
@@ -41,4 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20
     },
+    buttonContainer: {
+        marginTop: 20
+    }
 })

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: Colors.background,
         fontFamily: "Monsterat_400Regular",
-        textAlign: 'center',
+        textAlign: 'left',
         height: '100%',
         fontWeight: 'normal'
     }
