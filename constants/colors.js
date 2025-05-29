@@ -6,5 +6,6 @@ export const Colors = {
     cardBackground: "#352C3F",
     text: "#E0E0E0",
     inputBackground: "#BADDFF",
-    grayFaded: "#818181"
+    grayFaded: "#818181",
+    redAlert: "#FF0004"
 }

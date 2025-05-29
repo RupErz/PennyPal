@@ -2,12 +2,7 @@ import React, { useState } from 'react'
 import { Dimensions, StyleSheet, TextInput, View } from 'react-native'
 import { Colors } from '../constants/colors'
 
-const Input = () => {
-    const [name, setName] = useState('');
-
-    const handleNameChange = (text) => {
-        setName(text)
-    }
+const Input = ({value, onChangeText}) => {
 
     return (
         <View style={styles.inputContainer}>
@@ -18,8 +13,8 @@ const Input = () => {
                 maxLength={20}
                 keyboardType='default'
                 autoCapitalize='words'
-                value={name}
-                onChangeText={handleNameChange}
+                value={value}
+                onChangeText={onChangeText}
                 allowFontScaling={false}
                 autoFocus={true}
             />

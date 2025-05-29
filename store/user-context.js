@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext({
     userName: "",

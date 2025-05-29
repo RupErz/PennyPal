@@ -17,6 +17,7 @@ import GetIncome from './screens/OnBoard/GetIncome';
 import GetReady from './screens/OnBoard/GetReady';
 import Benefits from './screens/OnBoard/Benefits';
 import { Colors } from './constants/colors';
+import { UserContextProvider } from './store/user-context';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -124,24 +125,25 @@ export default function App() {
   const [hasOnBoarded, setHasOnBoarded] = useState(false)
 
   return (
-    <NavigationContainer>
-      <StatusBar style='light' />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!hasOnBoarded ? (
-          <Stack.Screen
-            name='OnBoardingStack'
-          >
-            {(props) => <OnBoardingStack {...props} setHasOnBoarded={setHasOnBoarded} />}
-          </Stack.Screen>
-        ) : (
-          <Stack.Screen
-            name='MainAppStack'
-            component={MainAppTabs}
-          />
-        ) }
-      </Stack.Navigator>
-    </NavigationContainer>
-    
+    <UserContextProvider>
+      <NavigationContainer>
+        <StatusBar style='light' />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {!hasOnBoarded ? (
+            <Stack.Screen
+              name='OnBoardingStack'
+            >
+              {(props) => <OnBoardingStack {...props} setHasOnBoarded={setHasOnBoarded} />}
+            </Stack.Screen>
+          ) : (
+            <Stack.Screen
+              name='MainAppStack'
+              component={MainAppTabs}
+            />
+          ) }
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserContextProvider>
   );
 }
 
