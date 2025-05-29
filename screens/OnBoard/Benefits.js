@@ -25,6 +25,7 @@ const Benefits = ({navigation}) => {
 
 export default Benefits
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
