@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { Dimensions, StyleSheet, TextInput, View } from 'react-native'
 import { Colors } from '../constants/colors'
 
-const Input = ({value, onChangeText}) => {
+const Input = ({value, onChangeText, style, placeholderText, keyboardType}) => {
 
     return (
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, style]}>
             <TextInput 
-                placeholder='Enter your name here'
+                placeholder={placeholderText}
                 placeholderTextColor={Colors.grayFaded}
                 style={styles.text}
                 maxLength={20}
-                keyboardType='default'
+                keyboardType={keyboardType || 'default'}
                 autoCapitalize='words'
                 value={value}
                 onChangeText={onChangeText}

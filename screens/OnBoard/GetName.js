@@ -40,7 +40,7 @@ const GetName = ({route, navigation}) => {
             <View style={styles.titleContainer}>
                 <Title>May we know your name ?</Title>
             </View>
-            <Input value={userInput} onChangeText={handleNameChange}/>
+            <Input value={userInput} onChangeText={handleNameChange} placeholderText={"Enter Your Name Here"}/>
             <View style={styles.alertContainer}>
                 {!isValid && (
                     <Text style={styles.alertText}>Your name cannot be empty !</Text>
