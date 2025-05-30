@@ -26,19 +26,34 @@ const GetIncome = ({route, navigation}) => {
       return;
     }
 
-    const normalized = stringIncome.replace(',','.').trim()
-    const parsed = parseFloat(normalized)
+    // Replace commas with dots
+    let normalized = stringIncome.replace(/,/g, '.').trim();
+
+    // Remove spaces and keep digits and only the first dot
+    let clean = "";
+    let dotFound = false;
+    for (let i = 0; i < normalized.length; i++) {
+      const char = normalized[i];
+      if (char >= '0' && char <= '9') {
+        clean += char;
+      } else if (char === '.' && !dotFound) {
+        clean += '.';
+        dotFound = true;
+      }
+      // Ignore everything else (like spaces, extra dots, etc.)
+    }
+
+    const parsed = parseFloat(clean);
+    console.log("Parsed:", parsed);
 
     if (isNaN(parsed) || parsed <= 0) {
-      setErrorMessage("Please enter a valid income amount")
+      setErrorMessage("Please enter a valid income amount");
       return;
     }
-    setIncomeInput(parsed)
 
-    // Save the income to context
-    setMonthlyIncome(parsed) // it's async so use parsed so we don't have to wait
-    // Navigate to get ready screen
-    navigation.navigate("GetReadyScreen")
+    setIncomeInput(parsed);
+    setMonthlyIncome(parsed);
+    navigation.navigate("GetReadyScreen");
   }
 
   const incomeSkip = () => {
@@ -61,7 +76,7 @@ const GetIncome = ({route, navigation}) => {
           placeholderText={"Enter Your Estimated Monthly Income"}
           keyboardType={'numeric'}
         />
-
+        <Text>E.g: 12 500. 50</Text>
         <View style={styles.errorMsgContainer}>
           {errorMessage !== "" && (
             <Text style={styles.warningText}>{errorMessage}</Text>
