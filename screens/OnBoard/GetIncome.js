@@ -70,13 +70,14 @@ const GetIncome = ({route, navigation}) => {
         <Title>monthly Income</Title>
 
         <Input 
-          value={stringIncome} 
-          onChangeText={handleIncomeChange} 
-          style={{marginVertical: 40}}
-          placeholderText={"Enter Your Estimated Monthly Income"}
-          keyboardType={'numeric'}
+        value={stringIncome} 
+        onChangeText={handleIncomeChange} 
+        style={{marginTop: 35, marginBottom: 10}}
+        placeholderText={"Enter Your Estimated Monthly Income"}
+        keyboardType={'numeric'}
         />
-        <Text>E.g: 12 500. 50</Text>
+        <Text style={styles.hintMessage}>E.g: 12 500.50 - use either dot or comma not both!</Text>
+        
         <View style={styles.errorMsgContainer}>
           {errorMessage !== "" && (
             <Text style={styles.warningText}>{errorMessage}</Text>
@@ -124,6 +125,12 @@ const styles = StyleSheet.create({
       marginHorizontal: 10,
     },
     errorMsgContainer: {
-      height: 20
-    }
+      height: 20,
+      marginTop: 40
+    },
+    hintMessage: {
+      color: Colors.grayFaded,
+      fontSize: 18,
+      fontFamily: "Monsterat_400Regular",
+    },
 })
