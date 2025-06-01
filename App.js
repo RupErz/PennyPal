@@ -10,14 +10,14 @@ import EditExpense from './screens/EditExpense';
 import MonthlySummary from './screens/MonthlySummary';
 import Analytics from './screens/Analytics';
 import Settings from './screens/Settings';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Welcome from './screens/OnBoard/Welcome';
 import GetName from './screens/OnBoard/GetName';
 import GetIncome from './screens/OnBoard/GetIncome';
 import GetReady from './screens/OnBoard/GetReady';
 import Benefits from './screens/OnBoard/Benefits';
 import { Colors } from './constants/colors';
-import { UserContextProvider } from './store/user-context';
+import { UserContext, UserContextProvider } from './store/user-context';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -121,31 +121,53 @@ const OnBoardingStack = ({setHasOnBoarded}) => {
   )
 }
 
+// Main Navigator to handle both Onboarding and Main App Stacks
+const MainNavigator = () => {
+  const {userName, monthlyIncome, hasCompletedOnboarding} = useContext(UserContext)
+  const [hasOnBoarded, setHasOnBoarded] = useState(!!hasCompletedOnboarding)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Loading state
+  useEffect(() => {
+    setIsLoading(false)
+  }, [])
+
+  // Will fix this later, make a custom loading / splash screen
+  if (isLoading) {
+    // Optional: show a splash or loader while checking
+    return <View style={{ flex: 1, backgroundColor: "#000" }} />;
+  }
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {!hasOnBoarded ? (
+        <Stack.Screen
+          name='OnBoardingStack'
+        >
+          {(props) => <OnBoardingStack {...props} setHasOnBoarded={setHasOnBoarded} />}
+        </Stack.Screen>
+      ) : (
+        <Stack.Screen
+          name='MainAppStack'
+          component={MainAppTabs}
+        />
+      ) }
+    </Stack.Navigator>
+  )
+}
+
 export default function App() {
-  const [hasOnBoarded, setHasOnBoarded] = useState(false)
 
   return (
     <UserContextProvider>
       <NavigationContainer>
         <StatusBar style='light' />
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {!hasOnBoarded ? (
-            <Stack.Screen
-              name='OnBoardingStack'
-            >
-              {(props) => <OnBoardingStack {...props} setHasOnBoarded={setHasOnBoarded} />}
-            </Stack.Screen>
-          ) : (
-            <Stack.Screen
-              name='MainAppStack'
-              component={MainAppTabs}
-            />
-          ) }
-        </Stack.Navigator>
+        <MainNavigator />
       </NavigationContainer>
     </UserContextProvider>
   );
 }
+
 
 const styles = StyleSheet.create({
   

@@ -41,11 +41,11 @@ export const UserContextProvider = ({children}) => {
 
     useEffect(() => {
         AsyncStorage.setItem("monthlyIncome", monthlyIncome.toString())
-    })
+    }, [monthlyIncome])
 
     useEffect(() => {
         AsyncStorage.setItem("hasCompletedOnboarding", hasCompletedOnboarding.toString())
-    })
+    }, [hasCompletedOnboarding])
 
     // Provide the context values
     return (
