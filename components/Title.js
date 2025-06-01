@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../constants/colors'
 
 
-const Title = ({ children, marginTop }) => {
+const Title = ({ children, marginTop, fontSize }) => {
     return (
         <View style={[styles.container, {marginTop: marginTop}]}>
             <Text style={styles.title}>{children}</Text>
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 24,
+        fontSize: 30, // or 24
         color: Colors.title,
         fontWeight: 'bold'
     },

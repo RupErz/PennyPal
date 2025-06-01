@@ -70,11 +70,11 @@ const GetIncome = ({route, navigation}) => {
         <Title>monthly Income</Title>
 
         <Input 
-        value={stringIncome} 
-        onChangeText={handleIncomeChange} 
-        style={{marginTop: 35, marginBottom: 10}}
-        placeholderText={"Enter Your Estimated Monthly Income"}
-        keyboardType={'numeric'}
+          value={stringIncome} 
+          onChangeText={handleIncomeChange} 
+          style={{marginTop: 35, marginBottom: 10}}
+          placeholderText={"Enter Your Estimated Monthly Income"}
+          keyboardType={'numeric'}
         />
         <Text style={styles.hintMessage}>E.g: 12 500.50 - use either dot or comma not both!</Text>
         
@@ -83,7 +83,6 @@ const GetIncome = ({route, navigation}) => {
             <Text style={styles.warningText}>{errorMessage}</Text>
           )}
         </View>
-        
 
         <PrimaryButton onPress={incomeConsent}>I Consent</PrimaryButton>
         <PrimaryButton onPress={incomeSkip}>Skip for now</PrimaryButton>
@@ -93,8 +92,6 @@ const GetIncome = ({route, navigation}) => {
           <Text style={styles.warningText}>If you skip, you will have limited features</Text>
           <Image source={require('../../assets/warning-sign.png')} />
         </View>
-
-
           
       </View>
   )
