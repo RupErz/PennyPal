@@ -5,15 +5,21 @@ export const UserContext = createContext({
     userName: "",
     monthlyIncome: 0,
     hasCompletedOnboarding: false,
+    onboardingStep: "Welcome",
     setUserName: () => {},
     setMonthlyIncome: () => {},
-    setHasCompletedOnboarding: () => {}
+    setHasCompletedOnboarding: () => {},
+    setOnboardingStep: () => {}
 })
 
 export const UserContextProvider = ({children}) => {
     const [userName, setUserName] = useState("")
     const [monthlyIncome, setMonthlyIncome] = useState(0)
     const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false)
+
+    // Tracking onboarding step
+    const [onboardingStep, setOnboardingStep] = useState("Welcome")
+    const [isLoading, setIsLoading] = useState(true)
 
     // Load Data from AsyncStorage
     useEffect(() => {
@@ -22,30 +28,45 @@ export const UserContextProvider = ({children}) => {
                 const storedName = await AsyncStorage.getItem("userName")
                 const storedIncome = await AsyncStorage.getItem("monthlyIncome")
                 const onboardingComplete = await AsyncStorage.getItem("hasCompletedOnboarding")
-                
+                const storedOnboardingStep = await AsyncStorage.getItem("onboardingStep")
+
+                // Debugging logs
+                console.log('Loaded userName:', storedName);
+                console.log('Loaded monthlyIncome:', storedIncome);
+                console.log('Loaded hasCompletedOnboarding:', onboardingComplete)
+                console.log('Loaded onboardingStep:', storedOnboardingStep);
+
                 if (storedName) setUserName(storedName)
                 if (storedIncome) setMonthlyIncome(Number(storedIncome))
                 if (onboardingComplete) setHasCompletedOnboarding(onboardingComplete === "true")
+                if (storedOnboardingStep) setOnboardingStep(storedOnboardingStep)      
             } catch (error) {
                 console.log("Failed to load user data:",  error)
+            } finally {
+                setIsLoading(false); // Set loading to false after attempting to load data
             }
         }
 
         loadUserData()
     }, [])
 
-    // Save Data to AsyncStorage whenever it changes
+    // Save all data whenever any of the tracked values change
     useEffect(() => {
-        AsyncStorage.setItem("userName", userName)
-    }, [userName])
+        const saveUserData = async () => {
+            try {
+            await AsyncStorage.setItem("userName", userName);
+            await AsyncStorage.setItem("monthlyIncome", monthlyIncome.toString());
+            await AsyncStorage.setItem("hasCompletedOnboarding", hasCompletedOnboarding.toString());
+            await AsyncStorage.setItem("onboardingStep", onboardingStep);
+            // console.log("User data saved successfully!"); Debugging Log
+            } catch (error) {
+                console.log("Failed to save user data:", error);
+            }
+        };
 
-    useEffect(() => {
-        AsyncStorage.setItem("monthlyIncome", monthlyIncome.toString())
-    }, [monthlyIncome])
+        saveUserData();
+    }, [userName, monthlyIncome, hasCompletedOnboarding, onboardingStep]);
 
-    useEffect(() => {
-        AsyncStorage.setItem("hasCompletedOnboarding", hasCompletedOnboarding.toString())
-    }, [hasCompletedOnboarding])
 
     // Provide the context values
     return (
@@ -54,9 +75,12 @@ export const UserContextProvider = ({children}) => {
                 userName,
                 monthlyIncome,
                 hasCompletedOnboarding,
+                onboardingStep,
                 setUserName,
                 setMonthlyIncome,
-                setHasCompletedOnboarding
+                setHasCompletedOnboarding,
+                setOnboardingStep,
+                isLoading // expose loading state
             }}
         >
             {children}

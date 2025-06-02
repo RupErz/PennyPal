@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Title from '../../components/Title'
 import BenefitsCard from '../../components/BenefitsCard'
 import PrimaryButton from '../../components/PrimaryButton'
+import { UserContext } from '../../store/user-context'
 
 const Benefits = ({navigation}) => {
+    const {setOnboardingStep} = useContext(UserContext)
     const navigateToGetName = () => {
+        setOnboardingStep("GetName")
         navigation.navigate('GetNameScreen');
     }
     return (

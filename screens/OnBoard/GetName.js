@@ -11,7 +11,7 @@ const GetName = ({route, navigation}) => {
     // For input validation
     const [isValid, setIsValid] = useState(true)
 
-    const {userName, setUserName} = useContext(UserContext)
+    const {userName, setUserName, setOnboardingStep} = useContext(UserContext)
 
     const handleNameChange = (name) => {
         setUserInput(name)
@@ -27,6 +27,7 @@ const GetName = ({route, navigation}) => {
 
         // Else we confirm saving the name to context and navigate
         setUserName(userInput.trim()) // trim the whitespaces
+        setOnboardingStep("GetIncome") // Next step in onboarding
         navigation.navigate("GetIncomeScreen")
     }
 

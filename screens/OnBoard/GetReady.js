@@ -6,9 +6,10 @@ import Title from '../../components/Title'
 import PrimaryButton from '../../components/PrimaryButton'
 
 const GetReady = ({route, navigation, setHasOnBoarded}) => {
-    const {hasCompletedOnboarding, setHasCompletedOnboarding} = useContext(UserContext)
+    const {hasCompletedOnboarding, setHasCompletedOnboarding, setOnboardingStep} = useContext(UserContext)
     
     const confirmedUser = () => {
+        setOnboardingStep("Completed")
         setHasCompletedOnboarding(true)
         setHasOnBoarded(true)
     }

@@ -7,7 +7,7 @@ import PrimaryButton from '../../components/PrimaryButton'
 import { Colors } from '../../constants/colors'
 
 const GetIncome = ({route, navigation}) => {
-  const {monthlyIncome, setMonthlyIncome} = useContext(UserContext)
+  const {monthlyIncome, setMonthlyIncome, setOnboardingStep} = useContext(UserContext)
   // Keep user raw input as string
   const [stringIncome, setStringIncome] = useState("")
   // As number for calculations
@@ -53,6 +53,7 @@ const GetIncome = ({route, navigation}) => {
 
     setIncomeInput(parsed);
     setMonthlyIncome(parsed);
+    setOnboardingStep("GetReady")
     navigation.navigate("GetReadyScreen");
   }
 
@@ -60,6 +61,7 @@ const GetIncome = ({route, navigation}) => {
     setIncomeInput(0) // Set to empty value
     setStringIncome("") // Reset the string input
     setMonthlyIncome(0)
+    setOnboardingStep("GetReady")
     navigation.navigate("GetReadyScreen") 
   }
     

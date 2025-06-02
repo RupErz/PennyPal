@@ -89,12 +89,23 @@ const MainAppTabs = () => {
 }
 
 const OnBoardingStack = ({setHasOnBoarded}) => {
+  const {onboardingStep} = useContext(UserContext)
+  
+  // By default, we start with the Welcome Screen
+  // If the onboardingStep is set, we navigate to the respective screen
+  let initialRouteName = 'WelcomeScreen'
+  if (onboardingStep === 'GetBenefits') initialRouteName = 'BenefitsScreen'
+  if (onboardingStep === 'GetName') initialRouteName = 'GetNameScreen' 
+  if (onboardingStep === 'GetIncome') initialRouteName = 'GetIncomeScreen' 
+  if (onboardingStep === 'GetReady') initialRouteName = 'GetReadyScreen' 
+ 
   return (
     <Stack.Navigator
       screenOptions={{ 
         headerShown: false ,
         contentStyle: { backgroundColor: Colors.background}
       }}
+      initialRouteName={initialRouteName} // Indicate which screen to show first
     >
       <Stack.Screen 
         name='WelcomeScreen'
@@ -123,17 +134,24 @@ const OnBoardingStack = ({setHasOnBoarded}) => {
 
 // Main Navigator to handle both Onboarding and Main App Stacks
 const MainNavigator = () => {
-  const {userName, monthlyIncome, hasCompletedOnboarding} = useContext(UserContext)
-  const [hasOnBoarded, setHasOnBoarded] = useState(!!hasCompletedOnboarding)
-  const [isLoading, setIsLoading] = useState(true)
+  const {userName, monthlyIncome, hasCompletedOnboarding, onboardingStep, isLoading} = useContext(UserContext)
+  const [hasOnBoarded, setHasOnBoarded] = useState(null)
+
+  // Debugging logs
+  // console.log(userName)
+  // console.log(monthlyIncome)
+  // console.log(hasCompletedOnboarding)
+  // console.log(onboardingStep)
 
   // Loading state
   useEffect(() => {
-    setIsLoading(false)
-  }, [])
+    if (!isLoading) {
+      setHasOnBoarded(hasCompletedOnboarding)
+    }
+  }, [isLoading, hasCompletedOnboarding])
 
   // Will fix this later, make a custom loading / splash screen
-  if (isLoading) {
+  if (isLoading || hasOnBoarded === null) {
     // Optional: show a splash or loader while checking
     return <View style={{ flex: 1, backgroundColor: "#000" }} />;
   }
