@@ -25,7 +25,14 @@ const Tab = createBottomTabNavigator()
 const HomeStack = () => {
   
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: Colors.background
+        }
+      }}
+    >
       <Stack.Screen
         name='Home'
         component={Home}
@@ -39,8 +46,8 @@ const HomeStack = () => {
         component={EditExpense}
       />
       <Stack.Screen
-        name='History'
-        component={History}
+        name='MonthlySummary'
+        component={MonthlySummary}
       />
     </Stack.Navigator>
   )
@@ -48,7 +55,11 @@ const HomeStack = () => {
 
 const HistoryStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
       <Stack.Screen 
         name='History'
         component={History}
@@ -67,7 +78,20 @@ const HistoryStack = () => {
 
 const MainAppTabs = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        // For styling tab bar
+        headerTintColor: 'white',
+        tabBarStyle: {
+          backgroundColor: Colors.background // Tab bar background
+        },
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "gray"
+      }}
+    >
       <Tab.Screen 
         name='HomeTab'
         component={HomeStack} // Using HomeStack to include Home, AddExpense, EditExpense, and History
