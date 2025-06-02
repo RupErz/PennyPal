@@ -7,5 +7,10 @@ export const Colors = {
     text: "#E0E0E0",
     inputBackground: "#BADDFF",
     grayFaded: "#818181",
-    redAlert: "#FF0004"
+    redAlert: "#FF0004",
+    redSmooth: "#EF3D3D",
+    darkHeavy: "#000000",
+    greenShine: "#45FD67",
+    grayShine: "#1F1B24"
 }
+
