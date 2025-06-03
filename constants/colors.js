@@ -11,6 +11,8 @@ export const Colors = {
     redSmooth: "#EF3D3D",
     darkHeavy: "#000000",
     greenShine: "#45FD67",
-    grayShine: "#1F1B24"
+    grayShine: "#1F1B24",
+    orange: "#FF6B35",
+    yellow: '#FFD700'
 }
 
