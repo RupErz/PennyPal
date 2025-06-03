@@ -3,14 +3,17 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../constants/colors'
 import ExpenseRow from './ExpenseDetail/ExpenseRow'
 
-const ExpenseCard = () => {
+const ExpenseCard = ({title, expenseData = []}) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Personal Finance</Text>
-            
-            <ExpenseRow label={"Income :"} expense={"20.000"} />
-            <ExpenseRow label={"Spent :"} expense={"20.000"} />
-            <ExpenseRow label={"Balance :"} expense={"20.000"} />
+            <Text style={styles.title}>{title}</Text>
+            {expenseData.map((item, index) => (
+                <ExpenseRow 
+                    key={index}
+                    label={item.label}
+                    expense={item.expense}
+                />
+            ))}
         </View>
     )
 }
@@ -21,7 +24,7 @@ const {width} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
-         width: width * 0.9, // Increased width for better use of space
+        width: width * 0.9, // Increased width for better use of space
         borderRadius: 16,
         padding: 16, // More consistent padding
         backgroundColor: Colors.cardBackground,

@@ -25,7 +25,7 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.buttonBackground,
-        width: width * 0.6,
+        minWidth: width * 0.3,
         height: 50,
         borderRadius: 20,
         marginTop: 20,

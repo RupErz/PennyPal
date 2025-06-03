@@ -5,7 +5,7 @@ import { Colors } from '../../constants/colors'
 const ExpenseRow = ({label, expense}) => {
     return (
          <View style={styles.expenseRow}>
-            <Text style={styles.categoryText}>{label}</Text>
+            <Text style={styles.categoryText}>{label} :</Text>
             <View style={styles.expenseDiplayContainer}>
                 <Text style={styles.expenseText}>$ {expense}</Text>
             </View>
