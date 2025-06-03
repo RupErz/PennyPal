@@ -1,11 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 
 const ExpenseRow = ({label, expense}) => {
     return (
          <View style={styles.expenseRow}>
-            <Text style={styles.categoryText}>{label} :</Text>
+            <View style={styles.categoryTitle}>
+                <Image source={require('../../assets/pink-circle.png')} style={styles.pinkCircle} />
+                <Text style={styles.categoryText}>{label} :</Text>
+            </View>
             <View style={styles.expenseDiplayContainer}>
                 <Text style={styles.expenseText}>$ {expense}</Text>
             </View>
@@ -44,4 +47,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    categoryTitle : {
+        flexDirection: 'row',
+        alignItems: 'center'
+        
+    },
+    pinkCircle: {
+       width: 10,
+       height: 10,
+       marginRight: 10
+    }
 })
