@@ -28,7 +28,7 @@ const HomeStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        contentStyle: {
+        cardStyle: {
           backgroundColor: Colors.background
         }
       }}
@@ -130,7 +130,7 @@ const OnBoardingStack = ({setHasOnBoarded}) => {
     <Stack.Navigator
       screenOptions={{ 
         headerShown: false ,
-        contentStyle: { backgroundColor: Colors.background}
+        cardStyle: { backgroundColor: Colors.background}
       }}
       initialRouteName={initialRouteName} // Indicate which screen to show first
     >
