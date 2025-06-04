@@ -8,7 +8,7 @@ import { Colors } from '../constants/colors'
 import PrimaryButton from '../components/PrimaryButton'
 import RecentExpenseCard from '../components/RecentExpenseCard'
 
-const Home = () => {
+const Home = ({navigation}) => {
     const {userName, monthlyIncome} = useContext(UserContext)
     
     // Creating Animations
@@ -95,6 +95,9 @@ const Home = () => {
         ]).start()
     }, [])
 
+    const onPressAddButton = () => {
+        navigation.navigate("AddExpense")
+    }
     
 
     return (
@@ -165,7 +168,7 @@ const Home = () => {
                 <View style={styles.quickActionCard}>
                     <Text style={styles.quickActionTitle}>Track Today's Spending</Text>
                     <Text style={styles.quickActionSubtitle}>Keep your streak going! 🎯</Text>
-                    <PrimaryButton onPress={() => {console.log("Go to Add Form")}}>+ Add Expense</PrimaryButton>
+                    <PrimaryButton onPress={onPressAddButton}>+ Add Expense</PrimaryButton>
                 </View>
 
 
