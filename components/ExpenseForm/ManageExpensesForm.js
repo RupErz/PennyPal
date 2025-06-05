@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 import CategoryTitle from './CategoryTitle'
 import ExpenseInput from './ExpenseInput'
 import GetDateButton from './GetDateButton'
 import CategoryButton from './CategoryButton'
 import { getFormattedDate } from '../../util/utility'
-
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 const AddForm = ({defaultValue}) => {
     const [inputs, setInputs] = useState({
@@ -27,6 +27,36 @@ const AddForm = ({defaultValue}) => {
             isValid: true
         }
     })
+
+    // State for date picker
+    const [showDatePicker, setShowDatePicker] = useState(false)
+
+    // Handle date picker change
+    const handleDateChange = (event, selectedDate) => {
+        setShowDatePicker(false)
+        if (selectedDate && event.type !== 'dismissed') {
+            const formattedDate = getFormattedDate(selectedDate)
+            inputChangeHandler('date', formattedDate)
+        }        
+    }
+
+    // Handle current date button press
+    const handleCurrentDatePress = () => {
+        const currentDate = new Date()
+        const formattedDate = getFormattedDate(currentDate)
+        inputChangeHandler('date', formattedDate)
+    }
+
+    //Get current date for picker (fallback: today)
+    // If this is edit : show the date they pick 
+    // Else show current date
+    const getPickerDate = () => {
+        if (inputs.date.value) {
+            const dateObj = new Date(inputs.date.value)
+            return dateObj.toString() !== 'Invalid Date' ? dateObj : new Date()
+        }
+        return new Date()
+    }
     
     const inputChangeHandler = (inputIdentifier, enteredData) => {
         console.log("Amount change handler")
@@ -64,19 +94,19 @@ const AddForm = ({defaultValue}) => {
             setInputs((curInputs) => {
                 return {
                     title: {
-                        value: defaultValue ? defaultValue.title : "",
+                        value: curInputs.title,
                         isValid: titleIsValid
                     },
                     amount: {
-                        value: defaultValue ? defaultValue.amount.toString() : "",
+                        value: curInputs.amount.toString(),
                         isValid: amountIsValid
                     },
                     date: {
-                        value: defaultValue ? getFormattedDate(defaultValue.date) : "",
+                        value: getFormattedDate(curInputs.date),
                         isValid: dateIsValid
                     },
                     category: {
-                        value: defaultValue ? defaultValue.category : "",
+                        value: curInputs.category,
                         isValid: categoryIsValid
                     }
                 }
@@ -123,23 +153,41 @@ const AddForm = ({defaultValue}) => {
                 <View style={styles.rowContainer}>
                     <CategoryTitle>Date :</CategoryTitle>
                     <View style={styles.inputContainer}>
-                        <ExpenseInput
-                            label={"YYYY-MM-DD"}
-                            textInputConfig={{
-                                value: inputs.date.value,
-                                onChangeText: inputChangeHandler.bind(this, 'date'),
-                                maxLength: 10
-                            }}
-                        />
+                        {/* Should change this into a button for datepicker */}
+                        <TouchableOpacity
+                            onPress={() => setShowDatePicker(true)}
+                        >
+                            <View pointerEvents='none'>
+                                <ExpenseInput
+                                    label={"YYYY-MM-DD"}
+                                    textInputConfig={{
+                                        value: inputs.date.value,
+                                        onChangeText: () => {},
+                                        maxLength: 10
+                                    }}
+                                 />
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
                 {/* Button to auto fill current date for user */}
                 <View style={styles.dateButtonContainer}>
-                    <GetDateButton />
+                    <GetDateButton onPress={handleCurrentDatePress} />
                     <Text style={styles.dateButtonText}>Get current date</Text>
                 </View>
             </View>
+
+            {/* Date Picker Modal */}
+            {showDatePicker && (
+                <DateTimePicker
+                    value={getPickerDate()}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateChange}
+                    maximumDate={new Date()} // Optional: prevent future dates
+                />
+            )}
 
             {/* Category */}
             <CategoryTitle>Category :</CategoryTitle>

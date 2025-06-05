@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { Colors } from '../../constants/colors'
 
-const GetDateButton = () => {
+const GetDateButton = ({onPress}) => {
     const [isChangingColor, setIsChangingColor] = useState(false)
-    const changeButtonBackgroundColor = () => {
+    const [isPressed, setIsPressed] = useState(false)
+
+
+    const handleOnPressAutoFillDateButton = () => {
         setIsChangingColor(!isChangingColor)
+        onPress()
     }
 
     const newBackground = {
@@ -15,7 +19,7 @@ const GetDateButton = () => {
     return (
         <Pressable
             style={[styles.container, isChangingColor && newBackground ]}
-            onPress={changeButtonBackgroundColor}
+            onPress={handleOnPressAutoFillDateButton}
         >
         </Pressable>
     )
