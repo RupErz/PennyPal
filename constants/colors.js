@@ -13,6 +13,7 @@ export const Colors = {
     greenShine: "#45FD67",
     grayShine: "#1F1B24",
     orange: "#FF6B35",
-    yellow: '#FFD700'
+    yellow: '#FFD700',
+    blankWhite: "#D9D9D9"
 }
 
