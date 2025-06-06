@@ -3,10 +3,11 @@ import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { Colors } from '../../constants/colors'
 import CategoryTitle from './CategoryTitle'
 import ExpenseInput from './ExpenseInput'
-import GetDateButton from './GetDateButton'
+import GetCurrentDateButton from './GetCurrentDateButton'
 import CategoryButton from './CategoryButton'
 import { getFormattedDate } from '../../util/utility'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import PickDateButton from './PickDateButton'
 
 const AddForm = ({defaultValue}) => {
     const [inputs, setInputs] = useState({
@@ -153,27 +154,17 @@ const AddForm = ({defaultValue}) => {
                 <View style={styles.rowContainer}>
                     <CategoryTitle>Date :</CategoryTitle>
                     <View style={styles.inputContainer}>
-                        {/* Should change this into a button for datepicker */}
-                        <TouchableOpacity
-                            onPress={() => setShowDatePicker(true)}
-                        >
-                            <View pointerEvents='none'>
-                                <ExpenseInput
-                                    label={"YYYY-MM-DD"}
-                                    textInputConfig={{
-                                        value: inputs.date.value,
-                                        onChangeText: () => {},
-                                        maxLength: 10
-                                    }}
-                                 />
-                            </View>
-                        </TouchableOpacity>
+                        <PickDateButton 
+                            date={inputs.date.value} 
+                            onPress={() => setShowDatePicker(true)} 
+                            label='YYYY-MM-DD'    
+                        />
                     </View>
                 </View>
 
                 {/* Button to auto fill current date for user */}
                 <View style={styles.dateButtonContainer}>
-                    <GetDateButton onPress={handleCurrentDatePress} />
+                    <GetCurrentDateButton onPress={handleCurrentDatePress} />
                     <Text style={styles.dateButtonText}>Get current date</Text>
                 </View>
             </View>
