@@ -18,6 +18,7 @@ import GetReady from './screens/OnBoard/GetReady';
 import Benefits from './screens/OnBoard/Benefits';
 import { Colors } from './constants/colors';
 import { UserContext, UserContextProvider } from './store/user-context';
+import { ExpenseContextProvider } from './store/expense-context';
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -205,10 +206,12 @@ export default function App() {
 
   return (
     <UserContextProvider>
-      <NavigationContainer>
-        <StatusBar style='light' />
-        <MainNavigator />
-      </NavigationContainer>
+      <ExpenseContextProvider>
+        <NavigationContainer>
+          <StatusBar style='light' />
+          <MainNavigator />
+        </NavigationContainer>
+      </ExpenseContextProvider>
     </UserContextProvider>
   );
 }

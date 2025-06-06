@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const ExpenseContext = createContext({
     expenses: [],
@@ -89,5 +89,170 @@ export const ExpenseContextProvider = ({children}) => {
         ))
     }
 
-    
+    // Utility function helo for Summary table later !!!
+    // --------------------------------------------------------
+    // Get Expenses for a specific month/year
+    const getExpensesByMonth = (year, month) => {
+        return expenses.filter(expense => {
+            const expenseDate = new Date(expense.date)
+            return expenseDate.getFullYear() === year && expenseDate.getMonth() === month
+        })
+    }
+
+    // Get expense for entire year 
+    const getExpensesByYear = (year) => {
+        return expenses.filter((expense) => {
+            const expenseDate = new Date(expense.date)
+            return expenseDate.getFullYear === year
+        })
+    }
+
+    // Get all available years that have expenses 
+    const getAvailableYears = () => {
+        const years = expenses.map(expense => new Date(expense.date).getFullYear())
+        return [...new Set(years)].sort((a, b) => b - a) // Latest first
+    }
+
+    // Get all available months for a specific year
+    const getAvailableMonthsForYear = (year) => {
+        const months = expenses
+            .filter(expense => new Date(expense.date).getFullYear() === year)
+            .map(expense => new Date(expense.date).getMonth())
+        return [...new Set(months)].sort((a, b) => b - a) // Latest first
+    }
+
+    // Get expenses grouped by month for a year
+    const getExpensesGroupedByMonth = (year) => {
+        const yearExpenses = getExpensesByYear(year)
+        const grouped = {}
+
+        yearExpenses.forEach(expense => {
+            const month = new Date(expense.date).getMonth()
+            const monthName = new Date(expense.date).toLocaleString('default', {month: 'long'})
+
+            if (!grouped[month]) {
+                grouped[month] = {
+                    monthName,
+                    monthIndex: month,
+                    expenses: [],
+                    total: 0
+                }
+            }
+
+            grouped[month].expenses.push(expense)
+            grouped[month].total += expense.amount
+        })
+
+        return Object.values(grouped).sort((a, b) => b.monthIndex - a.monthIndex)
+    }
+
+    // Get total expenses for a specific month/year
+    const getTotalExpensesByMonth = (year, month) => {
+        const monthExpenses = getExpensesByMonth(year, month)
+        return monthExpenses.reduce((total, expense) => total + expense.amount, 0 )
+    }
+
+    // Get total expenses for entire year
+    const getTotalExpensesByYear = (year) => {
+        const yearExpenses = getExpensesByYear(year)
+        return yearExpenses.reduce((total, expense) => total + expense.amount, 0)
+    }
+
+    // Get expenses by category for a specific period
+    const getExpensesByCategory = (year, month = null) => {
+        const periodExpenses = month !== null
+            ? getExpensesByMonth(year, month)
+            : getExpensesByYear(year)
+
+            const categorized = {}
+
+            periodExpenses.forEach(expense => {
+                if (!categorized[expense.category]) {
+                    categorized[expense.category] = {
+                        category: expense.category,
+                        expenses: [],
+                        total: 0,
+                        count: 0
+                    }
+                }
+
+                categorized[expense.category].expenses.push(expense)
+                categorized[expense.category].total += expense.amount
+                categorized[expense.category].count += 1
+            })
+      
+            return Object.values(categorized).sort((a, b) => b.total - a.total)
+    }
+
+    // Search expenses by title 
+    const searchExpenses = (searchItem, year = null, month = null) => {
+        let searchPool = expenses;
+
+        if (year && month != null) {
+            searchPool = getExpensesByMonth(year, month)
+        } else if (year) {
+            searchPool = getExpensesByYear(year)
+        }
+
+        return searchPool.filter(expense =>
+            expense.title.toLowerCase().includes(searchItem.toLowerCase())
+        )
+    }
+
+    // Clear all expenses (useful for testing / reset functionality)
+    const clearAllExpenses = async () => {
+        try {
+            await AsyncStorage.removeItem("expenses")
+            setExpenses([])
+        } catch (error) {
+            console.log("Failed to clear expenses: ", error)
+        }
+    }
+
+    return (
+        <ExpenseContext.Provider
+            value={{
+                expenses,
+                isLoading,
+                addExpense,
+                updateExpense,
+                deleteExpense,
+                getExpensesByMonth,
+                getExpensesByYear,
+                getTotalExpensesByMonth,
+                getTotalExpensesByYear,
+                getAvailableYears,
+                getAvailableMonthsForYear,
+                getExpensesGroupedByMonth,
+                getExpensesByCategory,
+                searchExpenses,
+                clearAllExpenses
+            }}
+        >
+            {children}
+        </ExpenseContext.Provider>
+    )
 }
+
+// Custom hook for using ExpenseContext
+// export const useExpenseContext = () => {
+//     const context = useContext(ExpenseContext);
+//     if (!context) {
+//         throw new Error('useExpenseContext must be used within an ExpenseContextProvider');
+//     }
+//     return context;
+// };
+
+// Example expense data structure:
+/*
+{
+    id: "1704567890123_abc123def",
+    title: "Groceries",
+    amount: 75.50,
+    category: "Food",
+    date: "2024-01-06",
+    description: "Weekly grocery shopping",
+    createdAt: "2024-01-06T10:30:00.000Z",
+    updatedAt: "2024-01-06T10:30:00.000Z" // Optional, only if updated
+}
+*/
