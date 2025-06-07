@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 import CategoryTitle from './CategoryTitle'
@@ -10,6 +10,8 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import PickDateButton from './PickDateButton'
 import RadioButton from './RadioButton'
 import PrimaryButton from '../PrimaryButton'
+import { categoryMapping } from '../../constants/SuggestedModel'
+import RecommendedText from './RecommendedText'
 
 const AddForm = ({defaultValue}) => {
     const [inputs, setInputs] = useState({
@@ -30,9 +32,10 @@ const AddForm = ({defaultValue}) => {
             isValid: true
         }
     })
-
     // State for date picker
     const [showDatePicker, setShowDatePicker] = useState(false)
+    // State for suggested category 
+    const [suggestedCategory, setSuggestedCategory] = useState("")
 
     // Handle date picker change
     const handleDateChange = (event, selectedDate) => {
@@ -49,6 +52,33 @@ const AddForm = ({defaultValue}) => {
         const formattedDate = getFormattedDate(currentDate)
         inputChangeHandler('date', formattedDate)
     }
+
+    // Function to guess category based on title
+    const guessCategory = (title) => {
+        if (!title) return ""
+
+        const lowerTitle = title.toLowerCase().trim()
+
+        // Check for fully matches 
+        if (categoryMapping[lowerTitle]) {
+            return categoryMapping[lowerTitle]
+        }
+
+        // Check for partial matches
+        for (const [keyword, category] of Object.entries(categoryMapping)) {
+            if (lowerTitle.includes(keyword)) {
+                return category
+            }
+        }
+
+        return ""
+    }
+
+    // Upon input title is changing we find the suggestion 
+    useEffect(() => {
+        const suggestion = guessCategory(inputs.title.value)
+        setSuggestedCategory(suggestion)
+    }, [inputs.title.value])
 
     //Get current date for picker (fallback: today)
     // If this is edit : show the date they pick 
@@ -183,24 +213,41 @@ const AddForm = ({defaultValue}) => {
                 />
             )}
 
-            {/* Category */}
+            {/* Category with Smart Suggestions */}
             <CategoryTitle>Category :</CategoryTitle>
             <View style={styles.categoryContainer}>
-                <RadioButton 
-                    inputs={inputs}
-                    category={"Must Have"}
-                    onPress={() => {inputChangeHandler('category', "Must Have")}}
-                />
-                <RadioButton 
-                    inputs={inputs}
-                    category={"Nice to Have"}
-                    onPress={() => {inputChangeHandler('category', "Nice to Have")}}
-                />
-                <RadioButton 
-                    inputs={inputs}
-                    category={"Wasted"}
-                    onPress={() => {inputChangeHandler('category', "Wasted")}}
-                />
+                <View style={styles.radioButtonContainer}>
+                    <RadioButton 
+                        inputs={inputs}
+                        category={"Must Have"}
+                        onPress={() => {inputChangeHandler('category', "Must Have")}}
+                    />
+                    {suggestedCategory === "Must Have" && (
+                        <RecommendedText />
+                    )}
+                </View>
+                
+                <View style={styles.radioButtonContainer}>
+                    <RadioButton 
+                        inputs={inputs}
+                        category={"Nice to Have"}
+                        onPress={() => {inputChangeHandler('category', "Nice to Have")}}
+                    />
+                    {suggestedCategory === "Nice to Have" && (
+                        <RecommendedText />
+                    )}
+                </View>
+
+                <View style={styles.radioButtonContainer}>
+                    <RadioButton 
+                        inputs={inputs}
+                        category={"Wasted"}
+                        onPress={() => {inputChangeHandler('category', "Wasted")}}
+                    />
+                    {suggestedCategory === "Wasted" && (
+                        <RecommendedText />
+                    )}
+                </View>
             </View>
         </View>
     )
@@ -255,5 +302,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "white",
         fontWeight: '500',
+    },
+    radioButtonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     }
 })

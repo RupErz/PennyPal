@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         gap: 15,
         paddingVertical: 10,
         paddingHorizontal: 7,
-        borderWidth: 2, // Test
+        minWidth: '50%',
+        // borderWidth: 2, // Test
     },
     categoryTitle: {
         fontSize: 18,

@@ -14,6 +14,8 @@ export const Colors = {
     grayShine: "#1F1B24",
     orange: "#FF6B35",
     yellow: '#FFD700',
-    blankWhite: "#D9D9D9"
+    blankWhite: "#D9D9D9",
+    blurGreen200: "#E8F5E8",
+    blurGreen400: "#4CAF50",
 }
 
