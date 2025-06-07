@@ -1,37 +1,32 @@
 import React, { useState } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 
-const GetCurrentDateButton = ({onPress}) => {
-    const [isChangingColor, setIsChangingColor] = useState(false)
-
-    const handleOnPressAutoFillDateButton = () => {
-        setIsChangingColor(!isChangingColor)
-        onPress()
-    }
-
-    const newBackground = {
-        backgroundColor: Colors.greenShine
-    }
-
+const GetCurrentDateButton = ({children, onPress}) => {
+   
     return (
-        <Pressable
-            style={[styles.container, isChangingColor && newBackground ]}
-            onPress={handleOnPressAutoFillDateButton}
-        >
-        </Pressable>
+        <View style={styles.container}>
+            <Pressable
+                style={({ pressed }) => [styles.innerPressable, pressed && styles.pressed] }
+                android_ripple={{ color: Colors.subTitle, borderless: true }}
+                onPress={onPress}
+            >
+                <Text style={styles.text}>{children}</Text>
+            </Pressable>
+        </View>
     )
 }
 
 export default GetCurrentDateButton
 
+const {width} = Dimensions.get('window')
+
 const styles = StyleSheet.create({
-    container: {
-        width: 17,
-        height: 17,
-        borderColor: Colors.greenShine,
-        backgroundColor: Colors.background,
-        borderWidth: 2,
+     container: {
+        backgroundColor: Colors.greenShine,
+        minWidth: width * 0.3,
+        minHeight: 45,
+        borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -41,5 +36,19 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         overflow: 'hidden',
+    },
+    innerPressable: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',   
+        padding: 10 // use Padding no margin to avoid clipping text
+    },  
+    text: {
+        color: Colors.background,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    pressed: {
+        opacity: 0.75,
     }
 })

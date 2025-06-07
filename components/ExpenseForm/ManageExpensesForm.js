@@ -9,6 +9,7 @@ import { getFormattedDate } from '../../util/utility'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import PickDateButton from './PickDateButton'
 import RadioButton from './RadioButton'
+import PrimaryButton from '../PrimaryButton'
 
 const AddForm = ({defaultValue}) => {
     const [inputs, setInputs] = useState({
@@ -165,8 +166,9 @@ const AddForm = ({defaultValue}) => {
 
                 {/* Button to auto fill current date for user */}
                 <View style={styles.dateButtonContainer}>
-                    <GetCurrentDateButton onPress={handleCurrentDatePress} />
-                    <Text style={styles.dateButtonText}>Get current date</Text>
+                    <GetCurrentDateButton onPress={handleCurrentDatePress}>
+                        Get Current Date
+                    </GetCurrentDateButton>
                 </View>
             </View>
 
@@ -247,7 +249,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
-        marginLeft: 15,
         marginTop: 10
     },
     dateButtonText: {

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
-        paddingTop: 100,
+        paddingTop: 75,
         alignItems: 'center'
     },
     buttonContainer: {
