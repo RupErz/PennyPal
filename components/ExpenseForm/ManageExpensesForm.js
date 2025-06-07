@@ -8,6 +8,7 @@ import CategoryButton from './CategoryButton'
 import { getFormattedDate } from '../../util/utility'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import PickDateButton from './PickDateButton'
+import RadioButton from './RadioButton'
 
 const AddForm = ({defaultValue}) => {
     const [inputs, setInputs] = useState({
@@ -183,18 +184,21 @@ const AddForm = ({defaultValue}) => {
             {/* Category */}
             <CategoryTitle>Category :</CategoryTitle>
             <View style={styles.categoryContainer}>
-                <View style={styles.categoryOption}>
-                    <CategoryButton />
-                    <Text style={styles.categoryTitle}>Must Have</Text>
-                </View>
-                <View style={styles.categoryOption}>
-                    <CategoryButton />
-                    <Text style={styles.categoryTitle}>Nice to Have</Text>
-                </View>
-                <View style={styles.categoryOption}>
-                    <CategoryButton />
-                    <Text style={styles.categoryTitle}>Wasted</Text>
-                </View>
+                <RadioButton 
+                    inputs={inputs}
+                    category={"Must Have"}
+                    onPress={() => {inputChangeHandler('category', "Must Have")}}
+                />
+                <RadioButton 
+                    inputs={inputs}
+                    category={"Nice to Have"}
+                    onPress={() => {inputChangeHandler('category', "Nice to Have")}}
+                />
+                <RadioButton 
+                    inputs={inputs}
+                    category={"Wasted"}
+                    onPress={() => {inputChangeHandler('category', "Wasted")}}
+                />
             </View>
         </View>
     )
@@ -230,20 +234,12 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 15
     },
+    // Category
     categoryContainer: {
         paddingVertical: 5,
         gap: 12
     },
-    categoryTitle: {
-        fontSize: 15,
-        color: "white",
-        fontWeight: 'bold',
-    },
-    categoryOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 15,
-    },
+    // Date
     dateSection: {
         gap: 10
     },
