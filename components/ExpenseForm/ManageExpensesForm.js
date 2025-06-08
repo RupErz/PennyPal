@@ -14,8 +14,10 @@ import { categoryMapping } from '../../constants/SuggestedModel'
 import RecommendedText from './RecommendedText'
 import CancelButton from '../CancelButton'
 import { ExpenseContext } from '../../store/expense-context'
+import { useNavigation } from '@react-navigation/native'
 
 const AddForm = ({defaultValue}) => {
+    const navigation = useNavigation()
     const {addExpense} = useContext(ExpenseContext)
 
     const [inputs, setInputs] = useState({
@@ -160,6 +162,8 @@ const AddForm = ({defaultValue}) => {
         }
         // Submit the data if its all passed
         console.log("Submitting, ", expenseData)
+        addExpense(expenseData)
+        navigation.goBack()
 
     }
 
