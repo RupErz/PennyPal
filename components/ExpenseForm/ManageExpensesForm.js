@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 import CategoryTitle from './CategoryTitle'
@@ -12,15 +12,19 @@ import RadioButton from './RadioButton'
 import PrimaryButton from '../PrimaryButton'
 import { categoryMapping } from '../../constants/SuggestedModel'
 import RecommendedText from './RecommendedText'
+import CancelButton from '../CancelButton'
+import { ExpenseContext } from '../../store/expense-context'
 
 const AddForm = ({defaultValue}) => {
+    const {addExpense} = useContext(ExpenseContext)
+
     const [inputs, setInputs] = useState({
         title: {
             value: defaultValue ? defaultValue.title : "",
             isValid: true
         },
         amount: {
-            value: defaultValue ? defaultValue.amount.toString() : "",
+            value: defaultValue ? defaultValue.amount : "",
             isValid: true
         },
         date: {
@@ -103,9 +107,13 @@ const AddForm = ({defaultValue}) => {
 
     // Input Validate once user press Submit
     const submitHandler = () => {
+        // Handle white spacing amount input
+        const cleanedAmount = inputs.amount.value.replace(/\s/g, '').trim()
+        const parsedAmount = parseFloat(cleanedAmount)
+
         const expenseData = {
             title: inputs.title.value,
-            amount: +inputs.amount.value,
+            amount: parsedAmount,
             date: new Date(inputs.date.value),
             category: inputs.category.value,
         }
@@ -114,7 +122,11 @@ const AddForm = ({defaultValue}) => {
         const titleIsValid = expenseData.title.trim().length > 0
 
         // Amount : Cannot be empty or NaN or <= 0
-        const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0
+        const amountIsValid = !isNaN(expenseData.amount) && 
+                                expenseData.amount > 0 &&
+                                cleanedAmount !== "" &&
+                                isFinite(parsedAmount) // Ensure it's a real number
+
         
         // Date : valid format
         const dateIsValid = expenseData.date.toString() !== 'Invalid Date'
@@ -127,19 +139,19 @@ const AddForm = ({defaultValue}) => {
             setInputs((curInputs) => {
                 return {
                     title: {
-                        value: curInputs.title,
+                        value: curInputs.title.value,
                         isValid: titleIsValid
                     },
                     amount: {
-                        value: curInputs.amount.toString(),
+                        value: curInputs.amount.value,
                         isValid: amountIsValid
                     },
                     date: {
-                        value: getFormattedDate(curInputs.date),
+                        value: curInputs.date.value,
                         isValid: dateIsValid
                     },
                     category: {
-                        value: curInputs.category,
+                        value: curInputs.category.value,
                         isValid: categoryIsValid
                     }
                 }
@@ -147,28 +159,34 @@ const AddForm = ({defaultValue}) => {
             return;
         }
         // Submit the data if its all passed
+        console.log("Submitting, ", expenseData)
+
     }
 
     // Form is valid of not
-    const formIsInvalid = null
+    const formIsInvalid = !inputs.title.isValid || !inputs.amount.isValid || !inputs.date.isValid || !inputs.category.isValid
 
     return (
         <View style={styles.formContainer}>
             {/* Getting the title of expense */}
-            <CategoryTitle>Title</CategoryTitle>
-            <ExpenseInput 
-                label={"Enter Your Expense Title"}
-                textInputConfig={{
-                    value: inputs.title.value,
-                    onChangeText: inputChangeHandler.bind(this, 'title'),
-                    maxLength: 40,
-                    autoCapitalize:'words'
-                }}
-            />
+            <View style={styles.titleContainer}>
+                <CategoryTitle isValid={inputs.title.isValid}>Title</CategoryTitle>
+                <ExpenseInput 
+                    label={"Enter Your Expense Title"}
+                    textInputConfig={{
+                        value: inputs.title.value,
+                        onChangeText: inputChangeHandler.bind(this, 'title'),
+                        maxLength: 40,
+                        autoCapitalize:'words'
+                    }}
+                />
+            </View>
+            
+
 
             {/* Getting amount */}
             <View style={styles.rowContainer}>
-                <CategoryTitle>Amount :</CategoryTitle>
+                <CategoryTitle isValid={inputs.amount.isValid}>Amount :</CategoryTitle>
                 <View style={styles.inputContainer}>
                     <ExpenseInput 
                         label={"Enter Your Amount"}
@@ -184,7 +202,7 @@ const AddForm = ({defaultValue}) => {
             {/* Getting the date */}
             <View style={styles.dateSection}>
                 <View style={styles.rowContainer}>
-                    <CategoryTitle>Date :</CategoryTitle>
+                    <CategoryTitle isValid={inputs.date.isValid}>Date :</CategoryTitle>
                     <View style={styles.inputContainer}>
                         <PickDateButton 
                             date={inputs.date.value} 
@@ -214,7 +232,7 @@ const AddForm = ({defaultValue}) => {
             )}
 
             {/* Category with Smart Suggestions */}
-            <CategoryTitle>Category :</CategoryTitle>
+            <CategoryTitle isValid={inputs.category.isValid}>Category :</CategoryTitle>
             <View style={styles.categoryContainer}>
                 <View style={styles.radioButtonContainer}>
                     <RadioButton 
@@ -248,6 +266,16 @@ const AddForm = ({defaultValue}) => {
                         <RecommendedText />
                     )}
                 </View>
+            </View>
+
+            {/* Alert about invalid input */}
+            {formIsInvalid && (
+                <Text style={styles.textAlert}>Invalid inputs, please check again.</Text>
+            )}
+
+            <View style={styles.buttonContainer}>
+                <PrimaryButton onPress={submitHandler}>Submit</PrimaryButton>
+                <CancelButton>Cancel</CancelButton>
             </View>
         </View>
     )
@@ -283,6 +311,10 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 15
     },
+    // Title
+    titleContainer: {
+        gap: 10 
+    },
     // Category
     categoryContainer: {
         paddingVertical: 5,
@@ -306,5 +338,18 @@ const styles = StyleSheet.create({
     radioButtonContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 15
+    },
+    // Invalid prompt
+    textAlert: {
+        color: Colors.redAlert,
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 })

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.blankWhite,
         minWidth: 25,
         minHeight: 25,
-         borderWidth: 2,
+        borderWidth: 2,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

@@ -18,7 +18,9 @@ export const getCurrentDate = () => {
 
 // Convert date object into a proper format
 export function getFormattedDate(date) {
-    return date.toISOString().slice(0, 10);
+    if (date && date instanceof Date) {
+        return date.toISOString().slice(0, 10);
+    }
 }
 
 export function getDateMinusDays(date, days) {
