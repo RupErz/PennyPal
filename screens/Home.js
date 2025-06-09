@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
 import { Animated, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ExpenseCard from '../components/ExpenseCard'
 import { UserContext } from '../store/user-context'
@@ -10,6 +10,12 @@ import RecentExpenseCard from '../components/RecentExpenseCard'
 
 const Home = ({navigation}) => {
     const {userName, monthlyIncome} = useContext(UserContext)
+    
+    useLayoutEffect(() => {
+        navigation.getParent()?.setOptions({
+            title: "Home"
+        })
+    })
     
     // Creating Animations
     const fadeAnim = useRef(new Animated.Value(0)).current

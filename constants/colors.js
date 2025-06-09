@@ -17,5 +17,8 @@ export const Colors = {
     blankWhite: "#D9D9D9",
     blurGreen200: "#E8F5E8",
     blurGreen400: "#4CAF50",
+    must: '#10b981',
+    nice: '#f59e0b',
+    wasted: '#ef4444',
 }
 

@@ -28,7 +28,11 @@ const HomeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        headerTintColor: 'white',
         cardStyle: {
           backgroundColor: Colors.background
         }
@@ -37,21 +41,33 @@ const HomeStack = () => {
       <Stack.Screen
         name='Home'
         component={Home}
+        options={{
+          title: "Home"
+        }}
       />
       <Stack.Screen
         name='AddExpense'
         component={AddExpense}
         options={{
-          presentation: 'modal'
+          presentation: 'modal',
+          title: "Add Expense"
         }}
       />
       <Stack.Screen 
         name='EditExpense'
         component={EditExpense}
+        options={{
+          title: "Edit Expense"
+        }}
       />
       <Stack.Screen
         name='MonthlySummary'
         component={MonthlySummary}
+        options={({route}) => ({
+          title : route.params?.month && route.params?.year
+          ? `${route.params.month} ${route.params.year}`
+          : "Current Month Summary"
+        })}
       />
     </Stack.Navigator>
   )
@@ -61,28 +77,26 @@ const HistoryStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        headerTintColor: 'white'
       }}
     >
       <Stack.Screen 
         name='History'
         component={History}
+        options={{
+          title: "History"
+        }}
       />
-      {/* History -> List of past months -> Nav to HomeStack MonthlySummary */}
-      {/* <Stack.Screen 
-        name='MonthlySummary'
-        component={MonthlySummary}
-      /> */}
-      {/* const navigateToMonthlySummary = (year, month) => { */}
-        {/* // Navigate to HomeStack's MonthlySummary */}
-        {/* navigation.navigate('HomeTab', { */}
-          {/* screen: 'MonthlySummary', */}
-          {/* params: { year, month } */}
-        {/* }) */}
-      {/* } */}
       <Stack.Screen 
         name='Analytics'
         component={Analytics}
+        options={{
+          title: "Analytics"
+        }}
       />
     </Stack.Navigator>
   )
@@ -92,9 +106,7 @@ const MainAppTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors.title
-        },
+        headerShown: false,
         // For styling tab bar
         headerTintColor: 'white',
         tabBarStyle: {
