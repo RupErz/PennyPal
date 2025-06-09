@@ -103,7 +103,7 @@ export const ExpenseContextProvider = ({children}) => {
     const getExpensesByYear = (year) => {
         return expenses.filter((expense) => {
             const expenseDate = new Date(expense.date)
-            return expenseDate.getFullYear === year
+            return expenseDate.getFullYear() === year
         })
     }
 

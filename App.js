@@ -68,10 +68,18 @@ const HistoryStack = () => {
         name='History'
         component={History}
       />
-      <Stack.Screen 
+      {/* History -> List of past months -> Nav to HomeStack MonthlySummary */}
+      {/* <Stack.Screen 
         name='MonthlySummary'
         component={MonthlySummary}
-      />
+      /> */}
+      {/* const navigateToMonthlySummary = (year, month) => { */}
+        {/* // Navigate to HomeStack's MonthlySummary */}
+        {/* navigation.navigate('HomeTab', { */}
+          {/* screen: 'MonthlySummary', */}
+          {/* params: { year, month } */}
+        {/* }) */}
+      {/* } */}
       <Stack.Screen 
         name='Analytics'
         component={Analytics}
@@ -99,18 +107,22 @@ const MainAppTabs = () => {
       <Tab.Screen 
         name='HomeTab'
         component={HomeStack} // Using HomeStack to include Home, AddExpense, EditExpense, and History
+        options={{title: "Home"}}
       />
       <Tab.Screen 
         name='HistoryTab'
         component={HistoryStack}
+        options={{title: "History"}}
       />
       <Tab.Screen 
         name='AnalyticsTab'
         component={Analytics} // Assuming Analytics is a standalone screen
+        options={{title: "Analytics"}}
       />
       <Tab.Screen 
         name='SettingsTab'
         component={Settings}
+        options={{title: "Settings"}}
       />
     </Tab.Navigator>
   )

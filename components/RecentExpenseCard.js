@@ -2,8 +2,14 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors } from '../constants/colors'
 import { formatCurrency } from '../util/utility'
+import { useNavigation } from '@react-navigation/native'
 
 const RecentExpenseCard = ({title, recentExpenses}) => {
+    const navigation = useNavigation()
+    const navigateToMonthlySummary = () => {
+        navigation.navigate("MonthlySummary")
+    }
+
     const getCategoryIcon = (type) => {
         switch(type) {
             case 'must': return '🏠'
@@ -18,9 +24,7 @@ const RecentExpenseCard = ({title, recentExpenses}) => {
                 <Text style={styles.cardTitle}>{title}</Text>
                 <TouchableOpacity 
                     style={styles.viewAllButton}
-                    onPress={() => {
-                        console.log("Navigating to Monthly Summary Screen")
-                    }}
+                    onPress={navigateToMonthlySummary}
                 >
                     <Text style={styles.viewAllText}>View All →</Text>
                 </TouchableOpacity>
