@@ -13,13 +13,8 @@ import PrimaryButton from '../PrimaryButton'
 import { categoryMapping } from '../../constants/SuggestedModel'
 import RecommendedText from './RecommendedText'
 import CancelButton from '../CancelButton'
-import { ExpenseContext } from '../../store/expense-context'
-import { useNavigation } from '@react-navigation/native'
 
-const AddForm = ({defaultValue}) => {
-    const navigation = useNavigation()
-    const {addExpense} = useContext(ExpenseContext)
-
+const AddForm = ({defaultValue, onSubmit}) => {
     const [inputs, setInputs] = useState({
         title: {
             value: defaultValue ? defaultValue.title : "",
@@ -160,11 +155,9 @@ const AddForm = ({defaultValue}) => {
             })
             return;
         }
-        // Submit the data if its all passed
-        console.log("Submitting, ", expenseData)
-        addExpense(expenseData)
-        navigation.goBack()
-
+        
+        // Use onSubmit so we can reuse for edit screen
+        onSubmit(expenseData)
     }
 
     // Form is valid of not

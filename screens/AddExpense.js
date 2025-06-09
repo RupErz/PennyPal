@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import ManageExpensesForm from '../components/ExpenseForm/ManageExpensesForm'
-const AddExpense = () => {
+import { ExpenseContext } from '../store/expense-context'
+const AddExpense = ({navigation}) => {
+    const {addExpense} = useContext(ExpenseContext)
+    
+    const handleOnSubmit = (expenseData) => {
+        console.log("Submitting :", expenseData)
+        addExpense(expenseData)
+        navigation.goBack()
+    }
 
     return (
         <View style={styles.container}>
-            <ManageExpensesForm />
+            <ManageExpensesForm onSubmit={handleOnSubmit}/>
         </View>
     )
 }
