@@ -9,7 +9,7 @@ export const UserContext = createContext({
     setUserName: () => {},
     setMonthlyIncome: () => {},
     setHasCompletedOnboarding: () => {},
-    setOnboardingStep: () => {}
+    setOnboardingStep: () => {},
 })
 
 export const UserContextProvider = ({children}) => {

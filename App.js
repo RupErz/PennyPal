@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/Home';
@@ -18,8 +18,9 @@ import GetReady from './screens/OnBoard/GetReady';
 import Benefits from './screens/OnBoard/Benefits';
 import { Colors } from './constants/colors';
 import { UserContext, UserContextProvider } from './store/user-context';
+import { ExpenseContextProvider } from './store/expense-context';
 
-const Stack = createNativeStackNavigator()
+const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const HomeStack = () => {
@@ -28,7 +29,7 @@ const HomeStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        contentStyle: {
+        cardStyle: {
           backgroundColor: Colors.background
         }
       }}
@@ -40,6 +41,9 @@ const HomeStack = () => {
       <Stack.Screen
         name='AddExpense'
         component={AddExpense}
+        options={{
+          presentation: 'modal'
+        }}
       />
       <Stack.Screen 
         name='EditExpense'
@@ -127,7 +131,7 @@ const OnBoardingStack = ({setHasOnBoarded}) => {
     <Stack.Navigator
       screenOptions={{ 
         headerShown: false ,
-        contentStyle: { backgroundColor: Colors.background}
+        cardStyle: { backgroundColor: Colors.background}
       }}
       initialRouteName={initialRouteName} // Indicate which screen to show first
     >
@@ -202,10 +206,12 @@ export default function App() {
 
   return (
     <UserContextProvider>
-      <NavigationContainer>
-        <StatusBar style='light' />
-        <MainNavigator />
-      </NavigationContainer>
+      <ExpenseContextProvider>
+        <NavigationContainer>
+          <StatusBar style='light' />
+          <MainNavigator />
+        </NavigationContainer>
+      </ExpenseContextProvider>
     </UserContextProvider>
   );
 }

@@ -15,3 +15,14 @@ export const getCurrentDate = () => {
         day: 'numeric'
     }) // "June 2, 2025"
 }
+
+// Convert date object into a proper format
+export function getFormattedDate(date) {
+    if (date && date instanceof Date) {
+        return date.toISOString().slice(0, 10);
+    }
+}
+
+export function getDateMinusDays(date, days) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() - days)
+}

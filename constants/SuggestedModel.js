@@ -1,0 +1,132 @@
+export const categoryMapping = {
+    // --- Must Have ---
+    'grocery': 'Must Have',
+    'groceries': 'Must Have',
+    'supermarket': 'Must Have',
+    'aldi': 'Must Have',
+    'walmart': 'Must Have',
+    'costco': 'Must Have',
+
+    'rent': 'Must Have',
+    'mortgage': 'Must Have',
+    'landlord': 'Must Have',
+
+    'gas': 'Must Have',
+    'fuel': 'Must Have',
+    'shell': 'Must Have',
+    'chevron': 'Must Have',
+
+    'electric': 'Must Have',
+    'elec': 'Must Have',
+    'power': 'Must Have',
+    'water': 'Must Have',
+    'utility': 'Must Have',
+    'utilities': 'Must Have',
+
+    'internet': 'Must Have',
+    'wifi': 'Must Have',
+    'isp': 'Must Have',
+    'xfinity': 'Must Have',
+    'comcast': 'Must Have',
+    'verizon': 'Must Have',
+    'at&t': 'Must Have',
+
+    'phone': 'Must Have',
+    'cellphone': 'Must Have',
+    'mobile': 'Must Have',
+
+    'insurance': 'Must Have',
+    'health insurance': 'Must Have',
+    'auto insurance': 'Must Have',
+    'car insurance': 'Must Have',
+    'home insurance': 'Must Have',
+
+    'doctor': 'Must Have',
+    'hospital': 'Must Have',
+    'clinic': 'Must Have',
+    'medicine': 'Must Have',
+    'pharmacy': 'Must Have',
+    'prescription': 'Must Have',
+
+    'loan': 'Must Have',
+    'debt': 'Must Have',
+    'student loan': 'Must Have',
+    'credit card payment': 'Must Have',
+    'tuition': 'Must Have',
+    'school': 'Must Have',
+
+    'childcare': 'Must Have',
+    'daycare': 'Must Have',
+
+    'car repair': 'Must Have',
+    'mechanic': 'Must Have',
+
+    // --- Nice to Have ---
+    'coffee': 'Nice to Have',
+    'starbucks': 'Nice to Have',
+    'boba': 'Nice to Have',
+    'restaurant': 'Nice to Have',
+    'dining': 'Nice to Have',
+    'takeout': 'Nice to Have',
+    'delivery': 'Nice to Have',
+    'ubereats': 'Nice to Have',
+    'doordash': 'Nice to Have',
+
+    'movie': 'Nice to Have',
+    'cinema': 'Nice to Have',
+    'netflix': 'Nice to Have',
+    'hulu': 'Nice to Have',
+    'disney': 'Nice to Have',
+    'spotify': 'Nice to Have',
+    'itunes': 'Nice to Have',
+
+    'gym': 'Nice to Have',
+    'fitness': 'Nice to Have',
+    'membership': 'Nice to Have',
+    'planet fitness': 'Nice to Have',
+
+    'clothes': 'Nice to Have',
+    'shoes': 'Nice to Have',
+    'shopping': 'Nice to Have',
+    'fashion': 'Nice to Have',
+    'zara': 'Nice to Have',
+    'nike': 'Nice to Have',
+
+    'amazon': 'Nice to Have',
+    'electronics': 'Nice to Have',
+    'tech': 'Nice to Have',
+
+    'game': 'Nice to Have',
+    'xbox': 'Nice to Have',
+    'steam': 'Nice to Have',
+    'playstation': 'Nice to Have',
+
+    'book': 'Nice to Have',
+    'hobby': 'Nice to Have',
+    'craft': 'Nice to Have',
+    'lego': 'Nice to Have',
+
+    'travel': 'Nice to Have',
+    'vacation': 'Nice to Have',
+    'airbnb': 'Nice to Have',
+    'hotel': 'Nice to Have',
+    'uber': 'Nice to Have',
+    'lyft': 'Nice to Have',
+    'flight': 'Nice to Have',
+    'ticket': 'Nice to Have',
+
+    // --- Wasted ---
+    'impulse': 'Wasted',
+    'late fee': 'Wasted',
+    'penalty': 'Wasted',
+    'overdraft': 'Wasted',
+    'interest': 'Wasted',
+    'duplicate': 'Wasted',
+    'forgot': 'Wasted',
+    'mistake': 'Wasted',
+    'unnecessary': 'Wasted',
+    'unused': 'Wasted',
+    'no show': 'Wasted',
+    'refund failed': 'Wasted',
+    'cancellation fee': 'Wasted'
+};
