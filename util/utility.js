@@ -26,3 +26,22 @@ export function getFormattedDate(date) {
 export function getDateMinusDays(date, days) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() - days)
 }
+
+// Format currency
+export const formatCurrency2Digits = (amount) => {
+    return `$${amount.toFixed(2)}`;
+};
+
+// Format percentage
+export const formatPercentage = (percentage) => {
+    return `${percentage.toFixed(1)}%`;
+};
+
+// Format date
+export const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+        day: '2-digit', 
+        month: 'short' 
+    });
+};

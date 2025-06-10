@@ -20,5 +20,9 @@ export const Colors = {
     must: '#10b981',
     nice: '#f59e0b',
     wasted: '#ef4444',
+    purpleWhite: "#DDD6FE",
+    lightGray: "#D1D5DB",
+    textGray: '#6b7280',        // summaryCardTitle
+    textDarkGray: '#1f2937',    // summaryCardAmount  
+    textLightGray: '#9ca3af',   // summaryCardPercentage
 }
-
