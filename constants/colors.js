@@ -25,4 +25,6 @@ export const Colors = {
     textGray: '#6b7280',        // summaryCardTitle
     textDarkGray: '#1f2937',    // summaryCardAmount  
     textLightGray: '#9ca3af',   // summaryCardPercentage
+    lightBackground: '#f8fafc',  // Light grayish-blue background
+    lightBorder: '#e2e8f0',      // Light gray border
 }

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         color: Colors.wasted,
     },
     wastePercentageLabel: {
-        fontSize: 10,
+        fontSize: 12,
         color: Colors.textGray,
     }
 })

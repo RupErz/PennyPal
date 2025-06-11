@@ -5,6 +5,7 @@ import { UserContext } from '../store/user-context'
 import { Colors } from '../constants/colors'
 import { formatCurrency2Digits, formatPercentage } from '../util/utility'
 import SmartSummaryCard from '../components/MonthlySum/SmartSummaryCard'
+import CategorySlot from '../components/MonthlySum/CategorySlot'
 
 const MonthlySummary = ({navigation, route}) => {
   const {
@@ -60,6 +61,9 @@ const MonthlySummary = ({navigation, route}) => {
   const niceToHaveTotal = categoryData.find(cat => cat.category === 'nice')?.total || 0
   const wastedTotal = categoryData.find(cat => cat.category === 'wasted')?.total || 0
 
+  // Percentage of each category (Waste and Must already have below)
+  const niceToHaveRate = totalSpent > 0 ? (niceToHaveTotal / totalSpent) * 100 : 0 
+
   // Calculated smart expenses 
   const fixedExpense = mustHaveTotal
   const flexibleExpense = mustHaveTotal + niceToHaveTotal
@@ -72,6 +76,14 @@ const MonthlySummary = ({navigation, route}) => {
 
   // Handle delete Expense
 
+  const getCategoryEmoji = (category) => {
+    switch(category) {
+      case 'must': return '🏠' // or '⚡' or '🔑'
+      case 'nice': return '🛍️' // or '🎉' or '✨'
+      case 'wasted': return '💸' // or '⚠️' or '🗑️'
+      default: return '💰'
+    }
+  }
   return (
     <View style={styles.container}>
       {/* Header with date, total spent, saving */}
@@ -126,7 +138,14 @@ const MonthlySummary = ({navigation, route}) => {
         </View>
 
         {/* Category Break Down */}
-
+        <View style={styles.categoryContainer}>
+          <Text style={styles.sectionTitle}>Category Breakdown</Text>
+          <View style={styles.containerGridSlot}>
+            <CategorySlot category={"Must Have"} amount={formatCurrency2Digits(mustHaveTotal)} percentage={formatPercentage(fixedExpenseRate)} catEmoji={getCategoryEmoji("must")}/>
+            <CategorySlot category={"Nice to Have"} amount={formatCurrency2Digits(niceToHaveTotal)} percentage={formatPercentage(niceToHaveRate)} catEmoji={getCategoryEmoji("nice")}/>
+            <CategorySlot category={"Wasted"} amount={formatCurrency2Digits(wastedTotal)} percentage={formatPercentage(wastePercentage)} catEmoji={getCategoryEmoji("wasted")}/>
+          </View>
+        </View>
 
         {/* Expenses List */}
       </ScrollView>
@@ -139,7 +158,7 @@ export default MonthlySummary
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lightGray
+    backgroundColor: Colors.lightGray,
   },
   // Header
   header: {
@@ -187,5 +206,29 @@ const styles = StyleSheet.create({
   summaryCardsGrid: { 
     flexDirection: 'row',
     marginBottom: 10
+  },
+  // Category Breakdown
+  categoryContainer: {
+    backgroundColor: 'white',
+    margin: 15,
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 20,
+    borderRadius: 16,
+      elevation: 3,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.12,
+      shadowRadius: 6,
+  },
+  containerGridSlot: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.textDarkGray,
+    marginBottom: 15,
   }
 })
