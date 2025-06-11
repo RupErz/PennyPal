@@ -234,8 +234,9 @@ const AddForm = ({defaultValue, onSubmit}) => {
                 <View style={styles.radioButtonContainer}>
                     <RadioButton 
                         inputs={inputs}
-                        category={"Must Have"}
+                        category={"must"}
                         onPress={() => {inputChangeHandler('category', "must")}}
+                        label={"Must Have"}
                     />
                     {suggestedCategory === "Must Have" && (
                         <RecommendedText />
@@ -245,8 +246,9 @@ const AddForm = ({defaultValue, onSubmit}) => {
                 <View style={styles.radioButtonContainer}>
                     <RadioButton 
                         inputs={inputs}
-                        category={"Nice to Have"}
+                        category={"nice"}
                         onPress={() => {inputChangeHandler('category', "nice")}}
+                        label={"Nice to Have"}
                     />
                     {suggestedCategory === "Nice to Have" && (
                         <RecommendedText />
@@ -256,8 +258,9 @@ const AddForm = ({defaultValue, onSubmit}) => {
                 <View style={styles.radioButtonContainer}>
                     <RadioButton 
                         inputs={inputs}
-                        category={"Wasted"}
+                        category={"wasted"}
                         onPress={() => {inputChangeHandler('category', "wasted")}}
+                        label={"Wasted"}
                     />
                     {suggestedCategory === "Wasted" && (
                         <RecommendedText />
