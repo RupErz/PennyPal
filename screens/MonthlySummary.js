@@ -1,5 +1,5 @@
 import React, { useContext, useLayoutEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { ExpenseContext } from '../store/expense-context'
 import { UserContext } from '../store/user-context'
 import { Colors } from '../constants/colors'
@@ -19,8 +19,8 @@ const MonthlySummary = ({navigation, route}) => {
 
   // Get current date 
   const currentDate = new Date()
-  const [selectedYear] = useState(route?.param?.year || currentDate.getFullYear())
-  const [selectedMonth] = useState(route?.param?.month || currentDate.getMonth())
+  const [selectedYear] = useState(route?.params?.year || currentDate.getFullYear())
+  const [selectedMonth] = useState(route?.params?.month || currentDate.getMonth())
 
   const monthName = new Date(selectedYear, selectedMonth).toLocaleString('default', {
     month: 'long',
@@ -84,6 +84,7 @@ const MonthlySummary = ({navigation, route}) => {
       default: return '💰'
     }
   }
+  
   return (
     <View style={styles.container}>
       {/* Header with date, total spent, saving */}
@@ -103,52 +104,57 @@ const MonthlySummary = ({navigation, route}) => {
         </View>
       </View>
 
-      {/* Body of Monthly Summary Screen */}
-      <ScrollView
-        style={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+      {/* Smart Summary Card */}
+      <View style={styles.summaryCardsSection}>
+        <View style={styles.summaryCardsGrid}>
+          <SmartSummaryCard 
+            title={"Fixed Expense"}
+            amount={formatCurrency2Digits(fixedExpense)}
+            percentage={formatPercentage(fixedExpenseRate)}
+            type={"fixed"}
+          />
+
+          <SmartSummaryCard 
+            title={"Flexible Expense"}
+            amount={formatCurrency2Digits(flexibleExpense)}
+            percentage={formatPercentage(flexibleExpensesRate)}
+            type={"flexible"}
+          />
+        </View>
+
+        {/* Waste Analysis Card */}
+        {wastedTotal > 0 && (
+          <SmartSummaryCard 
+            title={"Waste Analysis"}
+            amount={formatCurrency2Digits(wastedTotal)}
+            percentage={formatPercentage(wastePercentage)}
+            type={"waste"}
+          />
+        )}
+      </View>
+
+      {/* Category Break Down */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Category Breakdown</Text>
+        <View style={styles.containerGridSlot}>
+          <CategorySlot category={"Must Have"} amount={formatCurrency2Digits(mustHaveTotal)} percentage={formatPercentage(fixedExpenseRate)} catEmoji={getCategoryEmoji("must")}/>
+          <CategorySlot category={"Nice to Have"} amount={formatCurrency2Digits(niceToHaveTotal)} percentage={formatPercentage(niceToHaveRate)} catEmoji={getCategoryEmoji("nice")}/>
+          <CategorySlot category={"Wasted"} amount={formatCurrency2Digits(wastedTotal)} percentage={formatPercentage(wastePercentage)} catEmoji={getCategoryEmoji("wasted")}/>
+        </View>
+      </View>
+
+      {/* A button navigate to a full expense item list */}
+      <Pressable
+        onPress={() => navigation.navigate('AllExpenses', { 
+          monthName: monthName,
+          monthExpenses: monthExpenses
+        })}
+        style={styles.customAllExpenseContainer} 
       >
-        {/* Smart Summary Card */}
-        <View style={styles.summaryCardsSection}>
-          <View style={styles.summaryCardsGrid}>
-            <SmartSummaryCard 
-              title={"Fixed Expense"}
-              amount={formatCurrency2Digits(fixedExpense)}
-              percentage={formatPercentage(fixedExpenseRate)}
-              type={"fixed"}
-            />
+        <Text style={styles.allExpenseTitle}>All Expenses ({monthExpenses.length})</Text>
+      </Pressable>
 
-            <SmartSummaryCard 
-              title={"Flexible Expense"}
-              amount={formatCurrency2Digits(flexibleExpense)}
-              percentage={formatPercentage(flexibleExpensesRate)}
-              type={"flexible"}
-            />
-          </View>
-
-          {/* Waste Analysis Card */}
-          {wastedTotal > 0 && (
-            <SmartSummaryCard 
-              title={"Waste Analysis"}
-              amount={formatCurrency2Digits(wastedTotal)}
-              percentage={formatPercentage(wastePercentage)}
-              type={"waste"}
-            />
-          )}
-        </View>
-
-        {/* Category Break Down */}
-        <View style={styles.categoryContainer}>
-          <Text style={styles.sectionTitle}>Category Breakdown</Text>
-          <View style={styles.containerGridSlot}>
-            <CategorySlot category={"Must Have"} amount={formatCurrency2Digits(mustHaveTotal)} percentage={formatPercentage(fixedExpenseRate)} catEmoji={getCategoryEmoji("must")}/>
-            <CategorySlot category={"Nice to Have"} amount={formatCurrency2Digits(niceToHaveTotal)} percentage={formatPercentage(niceToHaveRate)} catEmoji={getCategoryEmoji("nice")}/>
-            <CategorySlot category={"Wasted"} amount={formatCurrency2Digits(wastedTotal)} percentage={formatPercentage(wastePercentage)} catEmoji={getCategoryEmoji("wasted")}/>
-          </View>
-        </View>
-
-        {/* Expenses List */}
-      </ScrollView>
+       
     </View>
   )
 }
@@ -208,7 +214,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   // Category Breakdown
-  categoryContainer: {
+  sectionContainer: {
     backgroundColor: 'white',
     margin: 15,
     marginTop: 10,
@@ -230,5 +236,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.textDarkGray,
     marginBottom: 15,
-  }
+  },
 })

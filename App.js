@@ -19,6 +19,7 @@ import Benefits from './screens/OnBoard/Benefits';
 import { Colors } from './constants/colors';
 import { UserContext, UserContextProvider } from './store/user-context';
 import { ExpenseContextProvider } from './store/expense-context';
+import AllExpenses from './screens/AllExpenses';
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -68,6 +69,14 @@ const HomeStack = () => {
           ? `${route.params.month} ${route.params.year}`
           : "Current Month Summary"
         })}
+      />
+      <Stack.Screen
+        name='AllExpenses'
+        component={AllExpenses}
+        options={{
+          title: "All Expenses",
+          presentation: 'modal',
+        }}
       />
     </Stack.Navigator>
   )
