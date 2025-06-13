@@ -2,6 +2,7 @@ import React, { useLayoutEffect } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../constants/colors'
 import ExpenseItem from '../components/MonthlySum/ExpenseItem'
+import AddIonicon from '../components/MonthlySum/AddIonicon'
 
 const AllExpenses = ({route, navigation}) => {
     const {monthName, monthExpenses} = route?.params
@@ -34,9 +35,16 @@ const AllExpenses = ({route, navigation}) => {
         <View style={styles.container}>
             {/* Expenses List Header */}
             <View style={styles.customAllExpenseContainer}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.sectionTitle}>All Expenses ({monthExpenses.length})</Text>
+                <View style={styles.header}>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.sectionTitle}>All Expenses ({monthExpenses.length})</Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                        <AddIonicon />
+                    </View>
+                    
                 </View>
+                
                 <FlatList
                     data={monthExpenses}
                     renderItem={renderExpenseItem}
@@ -86,7 +94,8 @@ const styles = StyleSheet.create({
     },
     // Title Container 
     titleContainer: {
-        paddingHorizontal: 15
+        flex: 1,
+        paddingHorizontal: 15,
     },
     flatList: {
         flex: 1
@@ -113,4 +122,18 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: Colors.textLightGray
     },
+    // Header 
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 10,   
+    },
+    iconContainer: {
+        minWidth: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingRight: 10,
+        marginRight: 10
+    }
 })

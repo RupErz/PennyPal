@@ -8,6 +8,7 @@ import SmartSummaryCard from '../components/MonthlySum/SmartSummaryCard'
 import CategorySlot from '../components/MonthlySum/CategorySlot'
 import PreviewList from '../components/MonthlySum/PreviewList'
 import ViewAllButton from '../components/MonthlySum/ViewAllButton'
+import AddIonicon from '../components/MonthlySum/AddIonicon'
 
 const MonthlySummary = ({navigation, route}) => {
   const {
@@ -172,10 +173,17 @@ const MonthlySummary = ({navigation, route}) => {
       {previewExpenses.length > 0 && (
         <View style={styles.sectionContainer}>
           <View style={styles.previewHeader}>
-            <Text style={styles.sectionTitle}>Recent Expenses</Text>
-            <Text style={styles.previewSubtitle}>
-              Showing {previewExpenses.length} of {monthExpenses.length}
-            </Text>
+            <View>
+              <Text style={styles.sectionTitle}>Recent Expenses</Text>
+            </View>
+            <View>
+              <AddIonicon />
+            </View>
+          </View>
+          <View>
+             <Text style={styles.previewSubtitle}>
+                Showing {previewExpenses.length} of {monthExpenses.length}
+              </Text>
           </View>
 
           {/* Preview List */}
@@ -281,11 +289,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15
   },
   previewSubtitle: {
     fontSize: 13,
     color: Colors.cardBackground,
     fontWeight: '500'
+  },
+  iconContainer: {
+    
   }
 })
