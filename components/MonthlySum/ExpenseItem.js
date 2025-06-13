@@ -2,10 +2,14 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 import { formatCurrency2Digits, formatDate } from '../../util/utility'
+import { useNavigation } from '@react-navigation/native'
 
 const ExpenseItem = ({expense}) => {
+    const navigation = useNavigation()
     const navigateToEditForm = () => {
-        console.log("Clicked")
+        navigation.navigate('EditExpense', {
+            expenseId: expense.id
+        })
     }
 
     return (

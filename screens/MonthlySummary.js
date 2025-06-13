@@ -6,6 +6,8 @@ import { Colors } from '../constants/colors'
 import { formatCurrency2Digits, formatPercentage } from '../util/utility'
 import SmartSummaryCard from '../components/MonthlySum/SmartSummaryCard'
 import CategorySlot from '../components/MonthlySum/CategorySlot'
+import PreviewList from '../components/MonthlySum/PreviewList'
+import ViewAllButton from '../components/MonthlySum/ViewAllButton'
 
 const MonthlySummary = ({navigation, route}) => {
   const {
@@ -72,6 +74,29 @@ const MonthlySummary = ({navigation, route}) => {
   const wastePercentage = totalSpent > 0 ? ((wastedTotal / totalSpent) * 100) : 0
   const savingRate = monthlyIncome > 0 ? (((monthlyIncome - totalSpent) / monthlyIncome) * 100) : 0
 
+  // Get Preview Expenses (top 6-8)
+  const getPreviewExpenses = () => {
+    if (!monthExpenses || monthExpenses.length === 0) return []
+
+    // Sort by date (most recent one) take top 6
+    const sortedByDate = [...monthExpenses]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5)
+    
+    return sortedByDate
+  }
+
+  // Getting top 6 items to display
+  const previewExpenses = getPreviewExpenses()
+
+  // Navigate to Full List Item Screen
+  const toAllItemScreen = () => {
+    navigation.navigate('AllExpenses', { 
+      monthName: monthName,
+      monthExpenses: monthExpenses
+    })
+  }
+  
   // Handle edit Expense ( if user press on the expense)
 
   // Handle delete Expense
@@ -86,7 +111,7 @@ const MonthlySummary = ({navigation, route}) => {
   }
   
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header with date, total spent, saving */}
       <View style={styles.header}>
         {/* Current Date */}
@@ -143,19 +168,33 @@ const MonthlySummary = ({navigation, route}) => {
         </View>
       </View>
 
-      {/* A button navigate to a full expense item list */}
-      <Pressable
-        onPress={() => navigation.navigate('AllExpenses', { 
-          monthName: monthName,
-          monthExpenses: monthExpenses
-        })}
-        style={styles.customAllExpenseContainer} 
-      >
-        <Text style={styles.allExpenseTitle}>All Expenses ({monthExpenses.length})</Text>
-      </Pressable>
+      {/* Preview Section -> Lead to Full List dialog */}
+      {previewExpenses.length > 0 && (
+        <View style={styles.sectionContainer}>
+          <View style={styles.previewHeader}>
+            <Text style={styles.sectionTitle}>Recent Expenses</Text>
+            <Text style={styles.previewSubtitle}>
+              Showing {previewExpenses.length} of {monthExpenses.length}
+            </Text>
+          </View>
 
-       
-    </View>
+          {/* Preview List */}
+          <PreviewList previewExpenses={previewExpenses} />
+
+          {/* View All Button */}
+          <ViewAllButton onPress={toAllItemScreen}>
+            View All {monthExpenses.length} Expenses
+          </ViewAllButton>
+        </View>
+      )}
+
+      {/* Fallback: if there is no expenses  */}
+      {previewExpenses.length === 0 && (
+        <ViewAllButton onPress={toAllItemScreen}>
+          All Expenses ({monthExpenses.length})
+        </ViewAllButton>
+      )}
+    </ScrollView>
   )
 }
 
@@ -237,4 +276,16 @@ const styles = StyleSheet.create({
     color: Colors.textDarkGray,
     marginBottom: 15,
   },
+  // Preview Section
+  previewHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15
+  },
+  previewSubtitle: {
+    fontSize: 13,
+    color: Colors.cardBackground,
+    fontWeight: '500'
+  }
 })

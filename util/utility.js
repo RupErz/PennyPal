@@ -45,3 +45,13 @@ export const formatDate = (dateString) => {
         month: 'short' 
     });
 };
+
+// Get category emoji
+export const getCategoryEmoji = (category) => {
+    switch(category) {
+        case 'must': return '🏠' // or '⚡' or '🔑'
+        case 'nice': return '🛍️' // or '🎉' or '✨'
+        case 'wasted': return '💸' // or '⚠️' or '🗑️'
+        default: return '💰'
+    }
+}
