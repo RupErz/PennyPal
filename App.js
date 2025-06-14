@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/Home';
 import History from './screens/History';
-import AddExpense from './screens/AddExpense';
 import EditExpense from './screens/EditExpense';
 import MonthlySummary from './screens/MonthlySummary';
 import Analytics from './screens/Analytics';
@@ -20,6 +19,7 @@ import { Colors } from './constants/colors';
 import { UserContext, UserContextProvider } from './store/user-context';
 import { ExpenseContextProvider } from './store/expense-context';
 import AllExpenses from './screens/AllExpenses';
+import ManageExpense from './screens/ManageExpense';
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -47,20 +47,20 @@ const HomeStack = () => {
         }}
       />
       <Stack.Screen
-        name='AddExpense'
-        component={AddExpense}
+        name='ManageExpense'
+        component={ManageExpense}
         options={{
           presentation: 'modal',
-          title: "Add Expense"
+          title: "Manage Expense"
         }}
       />
-      <Stack.Screen 
+      {/* <Stack.Screen 
         name='EditExpense'
         component={EditExpense}
         options={{
           title: "Edit Expense"
         }}
-      />
+      /> */}
       <Stack.Screen
         name='MonthlySummary'
         component={MonthlySummary}
@@ -127,7 +127,7 @@ const MainAppTabs = () => {
     >
       <Tab.Screen 
         name='HomeTab'
-        component={HomeStack} // Using HomeStack to include Home, AddExpense, EditExpense, and History
+        component={HomeStack} // Using HomeStack to include Home, ManageExpense, and History
         options={{title: "Home"}}
       />
       <Tab.Screen 

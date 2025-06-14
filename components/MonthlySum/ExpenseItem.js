@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 const ExpenseItem = ({expense}) => {
     const navigation = useNavigation()
     const navigateToEditForm = () => {
-        navigation.navigate('EditExpense', {
+        navigation.navigate('ManageExpense', {
             expenseId: expense.id
         })
     }

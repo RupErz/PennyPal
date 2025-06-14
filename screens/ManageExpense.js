@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import ManageExpensesForm from '../components/ExpenseForm/ManageExpensesForm'
 import { ExpenseContext } from '../store/expense-context'
-const AddExpense = ({navigation}) => {
+const ManageExpense = ({navigation}) => {
     const {addExpense} = useContext(ExpenseContext)
     
     const handleOnSubmit = (expenseData) => {
@@ -18,7 +18,7 @@ const AddExpense = ({navigation}) => {
     )
 }
 
-export default AddExpense
+export default ManageExpense
 
 const styles = StyleSheet.create({
     container: {

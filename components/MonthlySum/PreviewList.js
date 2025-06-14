@@ -18,7 +18,7 @@ const PreviewList = ({previewExpenses}) => {
     const renderExpensePreview = ({item}) => {
          // Carry the item id to Edit Expense screen
         const navigateToEdit = () => {
-            navigation.navigate('EditExpense', {
+            navigation.navigate('ManageExpense', {
                 expenseId: item.id
             })
         }

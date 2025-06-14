@@ -109,7 +109,7 @@ const Home = ({navigation}) => {
     }, [])
 
     const onPressAddButton = () => {
-        navigation.navigate("AddExpense")
+        navigation.navigate("ManageExpense") // Change to ManageExpense
     }
     
 

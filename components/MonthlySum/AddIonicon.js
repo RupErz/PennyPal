@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 const AddIonicon = () => {
     const navigation = useNavigation()
     const goToAddForm = () => {
-        navigation.navigate("AddExpense")
+        navigation.navigate("ManageExpense")
     }
     return (
         <Pressable
