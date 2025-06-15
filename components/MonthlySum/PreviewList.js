@@ -36,6 +36,7 @@ const PreviewList = ({previewExpenses}) => {
                         </Text>
                         <Text style={styles.expenseDate}>
                             {new Date(item.date).toLocaleDateString('en-US', { 
+                                timeZone: 'UTC',
                                 month: 'short', 
                                 day: 'numeric' 
                             })}

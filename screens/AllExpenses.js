@@ -1,11 +1,18 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useContext, useLayoutEffect } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../constants/colors'
 import ExpenseItem from '../components/MonthlySum/ExpenseItem'
 import AddIonicon from '../components/MonthlySum/AddIonicon'
+import { ExpenseContext } from '../store/expense-context'
 
 const AllExpenses = ({route, navigation}) => {
-    const {monthName, monthExpenses} = route?.params
+    const {monthName, year, month} = route?.params
+
+    // Instead of passing the whole object list thru navigation
+    // We pass the year and month so we can extract
+    const {getExpensesByMonth} = useContext(ExpenseContext)
+    const monthExpenses = getExpensesByMonth(year, month)
+
     const renderExpenseItem = ({item}) => {
         return (
             <ExpenseItem 

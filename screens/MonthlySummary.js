@@ -94,7 +94,9 @@ const MonthlySummary = ({navigation, route}) => {
   const toAllItemScreen = () => {
     navigation.navigate('AllExpenses', { 
       monthName: monthName,
-      monthExpenses: monthExpenses
+      // monthExpenses: monthExpenses,
+      year: selectedYear,
+      month: selectedMonth
     })
   }
   

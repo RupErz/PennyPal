@@ -13,15 +13,16 @@ import PrimaryButton from '../PrimaryButton'
 import { categoryMapping } from '../../constants/SuggestedModel'
 import RecommendedText from './RecommendedText'
 import CancelButton from '../CancelButton'
+import IconButton from './IconButton'
 
-const AddForm = ({defaultValue, onSubmit}) => {
+const AddForm = ({defaultValue, onSubmit, submitButtonLabel, onDelete, isEdit}) => {
     const [inputs, setInputs] = useState({
         title: {
             value: defaultValue ? defaultValue.title : "",
             isValid: true
         },
         amount: {
-            value: defaultValue ? defaultValue.amount : "",
+            value: defaultValue ? defaultValue.amount.toString() : "",
             isValid: true
         },
         date: {
@@ -44,14 +45,15 @@ const AddForm = ({defaultValue, onSubmit}) => {
         if (selectedDate && event.type !== 'dismissed') {
             const formattedDate = getFormattedDate(selectedDate)
             inputChangeHandler('date', formattedDate)
-        }        
+        }
     }
 
     // Handle current date button press
     const handleCurrentDatePress = () => {
-        const currentDate = new Date()
-        const formattedDate = getFormattedDate(currentDate)
-        inputChangeHandler('date', formattedDate)
+        const now = new Date()
+        const today = getFormattedDate(now) // Use your utility function
+        
+        inputChangeHandler('date', today)
     }
 
     // Function to guess category based on title
@@ -86,19 +88,23 @@ const AddForm = ({defaultValue, onSubmit}) => {
     // Else show current date
     const getPickerDate = () => {
         if (inputs.date.value) {
-            const dateObj = new Date(inputs.date.value)
-            return dateObj.toString() !== 'Invalid Date' ? dateObj : new Date()
+            const [year, month, day] = inputs.date.value.split('-').map(Number)
+            
+            // Create date at noon local time to avoid timezone issues
+            const dateObj = new Date(year, month - 1, day, 12, 0, 0)
+            
+            return isNaN(dateObj.getTime()) ? new Date() : dateObj
         }
         return new Date()
     }
     
     const inputChangeHandler = (inputIdentifier, enteredData) => {
-        console.log("Amount change handler")
         setInputs((curInputValues) => {
-            return {
+            const newInputs = {
                 ...curInputValues,
-                [inputIdentifier] : {value: enteredData, isValid: true}
+                [inputIdentifier]: { value: enteredData, isValid: true }
             }
+            return newInputs
         })
     }
 
@@ -108,12 +114,22 @@ const AddForm = ({defaultValue, onSubmit}) => {
         const cleanedAmount = inputs.amount.value.replace(/\s/g, '').trim()
         const parsedAmount = parseFloat(cleanedAmount)
 
+        let dateObj;
+        if (inputs.date.value) {
+            const [year, month, day] = inputs.date.value.split('-').map(Number)
+            // Create date at noon local time to avoid timezone issues
+            dateObj = new Date(year, month - 1, day, 12, 0, 0)
+        } else {
+            dateObj = new Date()
+        }
+
         const expenseData = {
             title: inputs.title.value,
             amount: parsedAmount,
-            date: new Date(inputs.date.value),
+            date: dateObj,
             category: inputs.category.value,
         }
+
         // Input Validation-------------------------
         // Title : Cannot be empty
         const titleIsValid = expenseData.title.trim().length > 0
@@ -126,7 +142,7 @@ const AddForm = ({defaultValue, onSubmit}) => {
 
         
         // Date : valid format
-        const dateIsValid = expenseData.date.toString() !== 'Invalid Date'
+        const dateIsValid = dateObj && !isNaN(dateObj.getTime()) && inputs.date.value.match(/^\d{4}-\d{2}-\d{2}$/)        
         
         // Category : Must not be empty
         // For now default value is ""
@@ -273,10 +289,21 @@ const AddForm = ({defaultValue, onSubmit}) => {
                 <Text style={styles.textAlert}>Invalid inputs, please check again.</Text>
             )}
 
+
             <View style={styles.buttonContainer}>
-                <PrimaryButton onPress={submitHandler}>Submit</PrimaryButton>
+                <PrimaryButton onPress={submitHandler}>{submitButtonLabel}</PrimaryButton>
                 <CancelButton>Cancel</CancelButton>
             </View>
+            {isEdit && (
+                <View style={styles.deleteContainer}>
+                    <IconButton
+                        name={'trash'}
+                        color={Colors.redSmooth}
+                        size={40}
+                        onPress={onDelete}
+                    />
+                </View>
+            )}
         </View>
     )
 }
@@ -299,7 +326,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        gap: 20 // control spacing between child elements in flexbox
+        gap: 15 // control spacing between child elements in flexbox
     },
     rowContainer: {
         flexDirection: 'row',
@@ -313,12 +340,12 @@ const styles = StyleSheet.create({
     },
     // Title
     titleContainer: {
-        gap: 10 
+        gap: 8 
     },
     // Category
     categoryContainer: {
         paddingVertical: 5,
-        gap: 12
+        gap: 8
     },
     // Date
     dateSection: {
@@ -348,8 +375,13 @@ const styles = StyleSheet.create({
     // Invalid prompt
     textAlert: {
         color: Colors.redAlert,
-        fontSize: 20,
+        fontSize: 16,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    // Delete Container: 
+    deleteContainer: {
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

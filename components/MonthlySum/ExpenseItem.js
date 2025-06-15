@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../../constants/colors'
-import { formatCurrency2Digits, formatDate } from '../../util/utility'
+import { formatCurrency2Digits, formatDate, getFormattedDate } from '../../util/utility'
 import { useNavigation } from '@react-navigation/native'
 
 const ExpenseItem = ({expense}) => {
@@ -11,7 +11,7 @@ const ExpenseItem = ({expense}) => {
             expenseId: expense.id
         })
     }
-
+    
     return (
         <View style={styles.container}>
             <Pressable
