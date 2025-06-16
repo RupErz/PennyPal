@@ -90,6 +90,9 @@ const HistoryStack = () => {
         headerStyle: {
           backgroundColor: Colors.title
         },
+        cardStyle: {
+          backgroundColor: Colors.background
+        },
         headerTintColor: 'white'
       }}
     >

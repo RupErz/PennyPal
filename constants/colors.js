@@ -27,4 +27,6 @@ export const Colors = {
     textLightGray: '#9ca3af',   // summaryCardPercentage
     lightBackground: '#f8fafc',  // Light grayish-blue background
     lightBorder: '#e2e8f0',      // Light gray border
+    // For Supporting History Screen
+    cardPurpleBlackBackground: "#1F1927"
 }
