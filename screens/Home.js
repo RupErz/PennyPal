@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef } from 'react'
-import { Animated, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
+import { Animated, Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ExpenseCard from '../components/ExpenseCard'
 import { UserContext } from '../store/user-context'
 import { formatCurrency, getCurrentDate } from '../util/utility'
@@ -7,9 +7,22 @@ import Title from '../components/Title'
 import { Colors } from '../constants/colors'
 import PrimaryButton from '../components/PrimaryButton'
 import RecentExpenseCard from '../components/RecentExpenseCard'
+import { ExpenseContext } from '../store/expense-context'
 
 const Home = ({navigation}) => {
     const {userName, monthlyIncome} = useContext(UserContext)
+    
+    useLayoutEffect(() => {
+        navigation.getParent()?.setOptions({
+            title: "Home"
+        })
+    })
+
+    // Clear User Expense data (For testing)
+    const {clearAllExpenses} = useContext(ExpenseContext)
+    const clearData = () => {
+        clearAllExpenses()
+    }
     
     // Creating Animations
     const fadeAnim = useRef(new Animated.Value(0)).current
@@ -96,7 +109,7 @@ const Home = ({navigation}) => {
     }, [])
 
     const onPressAddButton = () => {
-        navigation.navigate("AddExpense")
+        navigation.navigate("ManageExpense") // Change to ManageExpense
     }
     
 
@@ -180,6 +193,8 @@ const Home = ({navigation}) => {
                         </Text>
                     </View>
                 )}
+
+                <Button title='Press me to clear' onPress={clearData}/>
             </Animated.View>
         </ScrollView>
         

@@ -2,8 +2,9 @@ import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../constants/colors'
 
-const EditExpense = () => {
-
+const EditExpense = ({route}) => {
+    const expenseId = route?.params.expenseId
+    console.log(`Got the id ${expenseId}`)
     return (
         <View style={styles.container}>
             <Text>This is Edit Expense screen</Text>

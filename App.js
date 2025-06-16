@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './screens/Home';
 import History from './screens/History';
-import AddExpense from './screens/AddExpense';
 import EditExpense from './screens/EditExpense';
 import MonthlySummary from './screens/MonthlySummary';
 import Analytics from './screens/Analytics';
@@ -19,6 +18,8 @@ import Benefits from './screens/OnBoard/Benefits';
 import { Colors } from './constants/colors';
 import { UserContext, UserContextProvider } from './store/user-context';
 import { ExpenseContextProvider } from './store/expense-context';
+import AllExpenses from './screens/AllExpenses';
+import ManageExpense from './screens/ManageExpense';
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -28,7 +29,11 @@ const HomeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        headerTintColor: 'white',
         cardStyle: {
           backgroundColor: Colors.background
         }
@@ -37,21 +42,41 @@ const HomeStack = () => {
       <Stack.Screen
         name='Home'
         component={Home}
-      />
-      <Stack.Screen
-        name='AddExpense'
-        component={AddExpense}
         options={{
-          presentation: 'modal'
+          title: "Home"
         }}
       />
-      <Stack.Screen 
+      <Stack.Screen
+        name='ManageExpense'
+        component={ManageExpense}
+        options={{
+          presentation: 'modal',
+          title: "Manage Expense"
+        }}
+      />
+      {/* <Stack.Screen 
         name='EditExpense'
         component={EditExpense}
-      />
+        options={{
+          title: "Edit Expense"
+        }}
+      /> */}
       <Stack.Screen
         name='MonthlySummary'
         component={MonthlySummary}
+        options={({route}) => ({
+          title : route.params?.month && route.params?.year
+          ? `${route.params.month} ${route.params.year}`
+          : "Current Month Summary"
+        })}
+      />
+      <Stack.Screen
+        name='AllExpenses'
+        component={AllExpenses}
+        options={{
+          title: "All Expenses",
+          presentation: 'modal',
+        }}
       />
     </Stack.Navigator>
   )
@@ -61,20 +86,26 @@ const HistoryStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        headerTintColor: 'white'
       }}
     >
       <Stack.Screen 
         name='History'
         component={History}
-      />
-      <Stack.Screen 
-        name='MonthlySummary'
-        component={MonthlySummary}
+        options={{
+          title: "History"
+        }}
       />
       <Stack.Screen 
         name='Analytics'
         component={Analytics}
+        options={{
+          title: "Analytics"
+        }}
       />
     </Stack.Navigator>
   )
@@ -84,9 +115,7 @@ const MainAppTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors.title
-        },
+        headerShown: false,
         // For styling tab bar
         headerTintColor: 'white',
         tabBarStyle: {
@@ -98,19 +127,23 @@ const MainAppTabs = () => {
     >
       <Tab.Screen 
         name='HomeTab'
-        component={HomeStack} // Using HomeStack to include Home, AddExpense, EditExpense, and History
+        component={HomeStack} // Using HomeStack to include Home, ManageExpense, and History
+        options={{title: "Home"}}
       />
       <Tab.Screen 
         name='HistoryTab'
         component={HistoryStack}
+        options={{title: "History"}}
       />
       <Tab.Screen 
         name='AnalyticsTab'
         component={Analytics} // Assuming Analytics is a standalone screen
+        options={{title: "Analytics"}}
       />
       <Tab.Screen 
         name='SettingsTab'
         component={Settings}
+        options={{title: "Settings"}}
       />
     </Tab.Navigator>
   )
