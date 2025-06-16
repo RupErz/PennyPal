@@ -18,31 +18,34 @@ const MonthCard = ({data}) => {
 
             {/* Category Content */}
             <View style={styles.categorySection}>
-                <View style={styles.categoryRow}>
-                    <View style={styles.categoryItem}>
-                        <View style={[styles.dot, {backgroundColor: Colors.must}]} />
-                        <Text style={styles.categoryDetail}>Must: {formatCurrency2Digits(data.must).toLocaleString()}</Text>
+                <View style={{marginBottom: 5}}>
+                    <View style={styles.categoryRow}>
+                        <View style={styles.categoryItem}>
+                            <View style={[styles.dot, {backgroundColor: Colors.must}]} />
+                            <Text style={styles.categoryDetail}>Must: {formatCurrency2Digits(data.must).toLocaleString()}</Text>
+                        </View>
+                        <View style={styles.categoryItem}>
+                            <View style={[styles.dot, {backgroundColor: Colors.nice}]} />
+                            <Text style={styles.categoryDetail}>Nice: {formatCurrency2Digits(data.must).toLocaleString()}</Text>
+                        </View>
                     </View>
-                    <View style={styles.categoryItem}>
-                        <View style={[styles.dot, {backgroundColor: Colors.nice}]} />
-                        <Text style={styles.categoryDetail}>Nice: {formatCurrency2Digits(data.must).toLocaleString()}</Text>
-                    </View>
-                </View>
 
-                <View style={styles.categoryRow}>
-                    <View style={styles.categoryItem}>
-                        <View style={[styles.dot, {backgroundColor: Colors.must}]} />
-                        <Text style={styles.categoryDetail}>Wasted: {formatCurrency2Digits(data.wasted).toLocaleString()}</Text>
-                    </View>
-                    <View style={styles.categoryItem}>
-                        <View style={[styles.dot, {backgroundColor: Colors.nice}]} />
-                        <Text style={styles.categoryDetail}>
-                            Income: {data.income !== 0
-                                ? (formatCurrency2Digits(data.income).toLocaleString())
-                                : "N/A"}
-                        </Text>
+                    <View style={styles.categoryRow}>
+                        <View style={styles.categoryItem}>
+                            <View style={[styles.dot, {backgroundColor: Colors.must}]} />
+                            <Text style={styles.categoryDetail}>Wasted: {formatCurrency2Digits(data.wasted).toLocaleString()}</Text>
+                        </View>
+                        <View style={styles.categoryItem}>
+                            <View style={[styles.dot, {backgroundColor: Colors.nice}]} />
+                            <Text style={styles.categoryDetail}>
+                                Income: {data.income !== 0
+                                    ? (formatCurrency2Digits(data.income).toLocaleString())
+                                    : "N/A"}
+                            </Text>
+                        </View>
                     </View>
                 </View>
+                
 
                 {/* Balance Section */}
                 <View style={styles.balanceSection}>
@@ -120,8 +123,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 12,
-        borderTopWidth: 1,
-        borderTopColor: 'white'
+        borderTopWidth: 2,
+        borderTopColor: 'white',
     },
     balanceDetails: {
         fontSize: 16,
