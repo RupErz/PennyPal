@@ -25,6 +25,7 @@ const MonthlySummary = ({navigation, route}) => {
   const [selectedYear] = useState(route?.params?.year || currentDate.getFullYear())
   const [selectedMonth] = useState(route?.params?.month || currentDate.getMonth())
 
+  console.log(selectedYear, selectedMonth)
   const monthName = new Date(selectedYear, selectedMonth).toLocaleString('default', {
     month: 'long',
     year: 'numeric'

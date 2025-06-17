@@ -160,9 +160,12 @@ export const ExpenseContextProvider = ({children}) => {
 
     // Get expenses by category for a specific period
     const getExpensesByCategory = (year, month = null) => {
+        const numericYear = parseInt(year)
+        const numericMonth = month !== null ? parseInt(month) : null
+
         const periodExpenses = month !== null
-            ? getExpensesByMonth(year, month)
-            : getExpensesByYear(year)
+            ? getExpensesByMonth(numericYear, numericMonth)
+            : getExpensesByYear(numericYear)
 
             const categorized = {}
 

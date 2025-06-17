@@ -3,17 +3,17 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 import { formatCurrency2Digits } from '../../util/utility'
 
-const MonthCard = ({data}) => {
+const MonthCard = ({data, totalSpent, income, onPress}) => {
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={() => console.log("Pressed")}
+            onPress={onPress}
             activeOpacity={0.7}
         >
             {/* Header */}
             <View style={styles.cardHeader}>
-                <Text style={styles.monthTitle}>{data.month}</Text>
-                <Text style={styles.totalSpentTitle}>{formatCurrency2Digits(data.totalSpent).toLocaleString()}</Text>
+                <Text style={styles.monthTitle}>{data.monthName}</Text>
+                <Text style={styles.totalSpentTitle}>{formatCurrency2Digits(totalSpent).toLocaleString()}</Text>
             </View>
 
             {/* Category Content */}
@@ -26,7 +26,7 @@ const MonthCard = ({data}) => {
                         </View>
                         <View style={styles.categoryItem}>
                             <View style={[styles.dot, {backgroundColor: Colors.nice}]} />
-                            <Text style={styles.categoryDetail}>Nice: {formatCurrency2Digits(data.must).toLocaleString()}</Text>
+                            <Text style={styles.categoryDetail}>Nice: {formatCurrency2Digits(data.nice).toLocaleString()}</Text>
                         </View>
                     </View>
 
@@ -38,8 +38,8 @@ const MonthCard = ({data}) => {
                         <View style={styles.categoryItem}>
                             <View style={[styles.dot, {backgroundColor: Colors.nice}]} />
                             <Text style={styles.categoryDetail}>
-                                Income: {data.income !== 0
-                                    ? (formatCurrency2Digits(data.income).toLocaleString())
+                                Income: {income !== 0
+                                    ? (formatCurrency2Digits(income).toLocaleString())
                                     : "N/A"}
                             </Text>
                         </View>
@@ -50,8 +50,8 @@ const MonthCard = ({data}) => {
                 {/* Balance Section */}
                 <View style={styles.balanceSection}>
                     <Text style={styles.balanceDetails}>
-                        Balance: {data.income !== 0
-                            ? (formatCurrency2Digits(data.income - data.totalSpent).toLocaleString())
+                        Balance: {income !== 0
+                            ? (formatCurrency2Digits(income - totalSpent).toLocaleString())
                             : "N/A"}
                     </Text>
                 </View>

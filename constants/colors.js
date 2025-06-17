@@ -28,5 +28,6 @@ export const Colors = {
     lightBackground: '#f8fafc',  // Light grayish-blue background
     lightBorder: '#e2e8f0',      // Light gray border
     // For Supporting History Screen
-    cardPurpleBlackBackground: "#1F1927"
+    cardPurpleBlackBackground: "#1F1927",
+    grayLine: "#444444"
 }
