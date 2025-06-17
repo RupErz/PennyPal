@@ -103,11 +103,31 @@ const HistoryStack = () => {
           title: "History"
         }}
       />
-      <Stack.Screen 
-        name='Analytics'
-        component={Analytics}
+      <Stack.Screen
+        name='MonthlySummary'
+      >
+        {/* Passing a prop to component != passing data through navigation */}
+        {(props) => (
+          <MonthlySummary 
+            {...props} 
+            context="history"  // Tell the component it's in history context
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen
+        name='AllExpenses'
+        component={AllExpenses}
         options={{
-          title: "Analytics"
+          title: "All Expenses",
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name='ManageExpense'
+        component={ManageExpense}
+        options={{
+          presentation: 'modal',
+          title: "Manage Expense"
         }}
       />
     </Stack.Navigator>

@@ -6,7 +6,7 @@ import AddIonicon from '../components/MonthlySum/AddIonicon'
 import { ExpenseContext } from '../store/expense-context'
 
 const AllExpenses = ({route, navigation}) => {
-    const {monthName, year, month} = route?.params
+    const {monthName, year, month, context} = route?.params
 
     // Instead of passing the whole object list thru navigation
     // We pass the year and month so we can extract
@@ -47,7 +47,11 @@ const AllExpenses = ({route, navigation}) => {
                         <Text style={styles.sectionTitle}>All Expenses ({monthExpenses.length})</Text>
                     </View>
                     <View style={styles.iconContainer}>
-                        <AddIonicon />
+                        <AddIonicon
+                            defaultMonth={month}
+                            defaultYear={year}
+                            context={context}
+                        />
                     </View>
                     
                 </View>

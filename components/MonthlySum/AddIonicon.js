@@ -4,10 +4,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 
-const AddIonicon = () => {
+const AddIonicon = ({defaultMonth, defaultYear, context}) => {
     const navigation = useNavigation()
     const goToAddForm = () => {
-        navigation.navigate("ManageExpense")
+        navigation.navigate("ManageExpense", {
+            defaultMonth: defaultMonth,
+            defaultYear: defaultYear,
+            context: context
+        })
     }
     return (
         <Pressable

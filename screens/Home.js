@@ -109,7 +109,11 @@ const Home = ({navigation}) => {
     }, [])
 
     const onPressAddButton = () => {
-        navigation.navigate("ManageExpense") // Change to ManageExpense
+        const today = new Date()
+        navigation.navigate("ManageExpense",{
+            defaultMonth: today.getFullYear() ,
+            defaultYear: today.getMonth() // Month index
+        }) // Change to ManageExpense
     }
     
 

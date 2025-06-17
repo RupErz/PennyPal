@@ -25,6 +25,7 @@ const History = () => {
             }))
         }))
     }, [getAvailableYears, getExpensesGroupedByMonth, monthlyIncome])
+    // console.log("Data type of year: ", typeof(sectionedData[0].title))
 
     // Data structure for SectionList:
     // [
@@ -56,8 +57,8 @@ const History = () => {
         // Calculated the total of each category
         // JS takes month as index : 0 -> Jan, 1 -> Feb
         const categoryTotals = getExpensesByCategory(item.year, item.monthIndex)
-        console.log("Logging categoryTotals: ", categoryTotals)
 
+        // console.log("Logging item: ", item)
         const must = categoryTotals.find(c => c.category === 'must')?.total || 0;
         const nice = categoryTotals.find(c => c.category === 'nice')?.total || 0;
         const wasted = categoryTotals.find(c => c.category === 'wasted')?.total || 0;
@@ -72,13 +73,10 @@ const History = () => {
         }
 
         const navigateToHome = () => {
-            // navigation.navigate('HomeTab', {
-            //     screen: 'MonthlySummary',
-            //     params: {
-            //         year: parseInt(item.year),
-            //         month: item.monthIndex
-            //     }
-            // })
+            navigation.navigate("MonthlySummary", {
+                year: item.year,
+                month: item.monthIndex
+            })
             console.log("Tab!")
         }
             

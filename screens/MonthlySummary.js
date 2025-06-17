@@ -10,7 +10,7 @@ import PreviewList from '../components/MonthlySum/PreviewList'
 import ViewAllButton from '../components/MonthlySum/ViewAllButton'
 import AddIonicon from '../components/MonthlySum/AddIonicon'
 
-const MonthlySummary = ({navigation, route}) => {
+const MonthlySummary = ({navigation, route, context}) => {
   const {
     getExpensesByMonth,
     getTotalExpensesByMonth,
@@ -20,7 +20,7 @@ const MonthlySummary = ({navigation, route}) => {
 
   const {monthlyIncome} = useContext(UserContext)
 
-  // Get current date 
+  // Get current date : year as number, month as index 0 -> Jan
   const currentDate = new Date()
   const [selectedYear] = useState(route?.params?.year || currentDate.getFullYear())
   const [selectedMonth] = useState(route?.params?.month || currentDate.getMonth())
@@ -97,13 +97,10 @@ const MonthlySummary = ({navigation, route}) => {
       monthName: monthName,
       // monthExpenses: monthExpenses,
       year: selectedYear,
-      month: selectedMonth
+      month: selectedMonth,
+      context: context
     })
   }
-  
-  // Handle edit Expense ( if user press on the expense)
-
-  // Handle delete Expense
 
   const getCategoryEmoji = (category) => {
     switch(category) {
@@ -180,7 +177,11 @@ const MonthlySummary = ({navigation, route}) => {
               <Text style={styles.sectionTitle}>Recent Expenses</Text>
             </View>
             <View>
-              <AddIonicon />
+              <AddIonicon 
+                defaultMonth={selectedMonth}
+                defaultYear={selectedYear}
+                context={context}
+              />
             </View>
           </View>
           <View>
