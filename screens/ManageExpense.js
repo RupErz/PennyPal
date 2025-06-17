@@ -13,6 +13,9 @@ const ManageExpense = ({navigation, route}) => {
     // Convert this id into boolean value - Edit or Add
     const isEditting = !!id
 
+    // Getting default month and year for user in History
+    const {defaultMonth, defaultYear, context} = route?.params || {}
+
     // Fetch the current expense we at with the id provided
     const selectedExpense = expenses.find((expense) => expense.id === id)
     console.log(selectedExpense)
@@ -73,6 +76,9 @@ const ManageExpense = ({navigation, route}) => {
                 // Passing these two to enable delete button once it is edtting mode
                 onDelete={deleteExpenseHandler}
                 isEdit={isEditting}
+                defaultMonth={defaultMonth}
+                defaultYear={defaultYear}
+                context={context} // Whether we from History or Home tab ( History or undefined: Hometab )
             />
         </View>
     )

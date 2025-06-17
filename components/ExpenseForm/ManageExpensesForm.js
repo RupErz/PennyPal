@@ -15,7 +15,7 @@ import RecommendedText from './RecommendedText'
 import CancelButton from '../CancelButton'
 import IconButton from './IconButton'
 
-const AddForm = ({defaultValue, onSubmit, submitButtonLabel, onDelete, isEdit}) => {
+const ManageExpensesForm  = ({defaultValue, onSubmit, submitButtonLabel, onDelete, isEdit, defaultMonth, defaultYear, context}) => {
     const [inputs, setInputs] = useState({
         title: {
             value: defaultValue ? defaultValue.title : "",
@@ -34,6 +34,10 @@ const AddForm = ({defaultValue, onSubmit, submitButtonLabel, onDelete, isEdit}) 
             isValid: true
         }
     })
+
+    console.log("Context is: ", context)
+
+
     // State for date picker
     const [showDatePicker, setShowDatePicker] = useState(false)
     // State for suggested category 
@@ -83,19 +87,24 @@ const AddForm = ({defaultValue, onSubmit, submitButtonLabel, onDelete, isEdit}) 
         setSuggestedCategory(suggestion)
     }, [inputs.title.value])
 
-    //Get current date for picker (fallback: today)
+    // Get current date for picker (fallback: today)
     // If this is edit : show the date they pick 
     // Else show current date
     const getPickerDate = () => {
-        if (inputs.date.value) {
-            const [year, month, day] = inputs.date.value.split('-').map(Number)
-            
-            // Create date at noon local time to avoid timezone issues
-            const dateObj = new Date(year, month - 1, day, 12, 0, 0)
-            
-            return isNaN(dateObj.getTime()) ? new Date() : dateObj
+        // If editing, always show the existing date (guaranteed to exist due to validation)
+        if (isEdit) {
+            const [year, month, day] = inputs.date.value.split('-').map(Number);
+            return new Date(year, month - 1, day, 12, 0, 0);
         }
-        return new Date()
+        
+        // If adding from HistoryTab, start at first day of the viewed month/year
+        if (context === "history") {
+            // no -1 because defaultMonth is already a month index
+            return new Date(defaultYear, defaultMonth, 1, 12, 0, 0);
+        }
+        
+        // Default case: show current date (for HomeTab add, since context is undefined)
+        return new Date();
     }
     
     const inputChangeHandler = (inputIdentifier, enteredData) => {
@@ -308,7 +317,7 @@ const AddForm = ({defaultValue, onSubmit, submitButtonLabel, onDelete, isEdit}) 
     )
 }
 
-export default AddForm
+export default ManageExpensesForm 
 const {width} = Dimensions.get('window')
 
 const styles = StyleSheet.create({

@@ -93,10 +93,12 @@ export const ExpenseContextProvider = ({children}) => {
     // --------------------------------------------------------
     // Get Expenses for a specific month/year
     const getExpensesByMonth = (year, month) => {
-        return expenses.filter(expense => {
-            const expenseDate = new Date(expense.date)
-            return expenseDate.getFullYear() === year && expenseDate.getMonth() === month
-        })
+        return expenses
+            .filter(expense => {
+                const expenseDate = new Date(expense.date)
+                return expenseDate.getFullYear() === year && expenseDate.getMonth() === month
+            })
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
     }
 
     // Get expense for entire year 
@@ -160,9 +162,12 @@ export const ExpenseContextProvider = ({children}) => {
 
     // Get expenses by category for a specific period
     const getExpensesByCategory = (year, month = null) => {
+        const numericYear = parseInt(year)
+        const numericMonth = month !== null ? parseInt(month) : null
+
         const periodExpenses = month !== null
-            ? getExpensesByMonth(year, month)
-            : getExpensesByYear(year)
+            ? getExpensesByMonth(numericYear, numericMonth)
+            : getExpensesByYear(numericYear)
 
             const categorized = {}
 
