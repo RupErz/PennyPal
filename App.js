@@ -134,6 +134,28 @@ const HistoryStack = () => {
   )
 }
 
+const AnalyticStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        cardStyle: {
+          backgroundColor: Colors.background
+        },
+        headerTintColor: 'white'
+      }}
+    >
+      <Stack.Screen 
+        name='Analytics'
+        component={Analytics}
+      />
+    </Stack.Navigator>
+  )
+}
+
 const MainAppTabs = () => {
   return (
     <Tab.Navigator
@@ -160,8 +182,11 @@ const MainAppTabs = () => {
       />
       <Tab.Screen 
         name='AnalyticsTab'
-        component={Analytics} // Assuming Analytics is a standalone screen
-        options={{title: "Analytics"}}
+        component={AnalyticStack} // Assuming Analytics is a standalone screen
+        options={{
+          title: "Analytics"
+          
+        }}
       />
       <Tab.Screen 
         name='SettingsTab'
