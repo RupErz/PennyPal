@@ -20,35 +20,150 @@ import Icon from 'react-native-vector-icons/Feather';
 const { width: screenWidth } = Dimensions.get('window');
 
 const Analytics = () => {
-    const [selectedPeriod, setSelectedPeriod] = useState('6months');
-  
-  // Sample data - replace with your actual data
-  const overallSpendingData = {
-    mustHave: 62.4,
-    niceToHave: 28.7,
-    wasted: 8.9
-  };
-  
-  const trendData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        data: [1200, 1300, 1250, 1400, 1350, 1450],
-        color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`, // Green for Must Have
-        strokeWidth: 2
+  const [selectedPeriod, setSelectedPeriod] = useState('6months');
+
+  // Period options for horizontal selector
+  const periods = [
+    { id: 'current', label: 'This Month', shortLabel: '1M' },
+    { id: '3months', label: '3 Months', shortLabel: '3M' },
+    { id: '6months', label: '6 Months', shortLabel: '6M' },
+  ];
+
+  // Sample data - replace with your actual data based on selected period
+  const getDataForPeriod = (period) => {
+    const dataMap = {
+      current: {
+        overallSpending: { mustHave: 68.2, niceToHave: 23.1, wasted: 8.7 },
+        trendData: {
+          labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+          datasets: [
+            {
+              data: [320, 380, 350, 420],
+              color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
+              strokeWidth: 2
+            },
+            {
+              data: [120, 90, 150, 110],
+              color: (opacity = 1) => `rgba(251, 191, 36, ${opacity})`,
+              strokeWidth: 2
+            },
+            {
+              data: [40, 60, 30, 50],
+              color: (opacity = 1) => `rgba(248, 113, 113, ${opacity})`,
+              strokeWidth: 2
+            }
+          ]
+        },
+        insights: [
+          {
+            type: 'success',
+            title: 'On Track!',
+            message: 'You\'re staying within your monthly budget',
+            color: '#22C55E',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          },
+          {
+            type: 'info',
+            title: 'Week Trend',
+            message: 'Spending increased 15% in the last week',
+            color: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          },
+        ]
       },
-      {
-        data: [400, 350, 500, 380, 420, 390],
-        color: (opacity = 1) => `rgba(251, 191, 36, ${opacity})`, // Yellow for Nice to Have
-        strokeWidth: 2
+      '3months': {
+        overallSpending: { mustHave: 65.3, niceToHave: 26.2, wasted: 8.5 },
+        trendData: {
+          labels: ["Month 1", "Month 2", "Month 3"],
+          datasets: [
+            {
+              data: [1420, 1380, 1450],
+              color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
+              strokeWidth: 2
+            },
+            {
+              data: [520, 480, 390],
+              color: (opacity = 1) => `rgba(251, 191, 36, ${opacity})`,
+              strokeWidth: 2
+            },
+            {
+              data: [180, 160, 140],
+              color: (opacity = 1) => `rgba(248, 113, 113, ${opacity})`,
+              strokeWidth: 2
+            }
+          ]
+        },
+        insights: [
+          {
+            type: 'success',
+            title: 'Improving!',
+            message: 'Wasted spending decreased 22% over 3 months',
+            color: '#22C55E',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          },
+          {
+            type: 'warning',
+            title: 'Watch Out',
+            message: 'Nice-to-have expenses peaked last month',
+            color: '#FBBF24',
+            backgroundColor: 'rgba(251, 191, 36, 0.1)',
+          },
+        ]
       },
-      {
-        data: [150, 200, 120, 180, 100, 160],
-        color: (opacity = 1) => `rgba(248, 113, 113, ${opacity})`, // Red for Wasted
-        strokeWidth: 2
+      '6months': {
+        overallSpending: { mustHave: 62.4, niceToHave: 28.7, wasted: 8.9 },
+        trendData: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              data: [1200, 1300, 1250, 1400, 1350, 1450],
+              color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
+              strokeWidth: 2
+            },
+            {
+              data: [400, 350, 500, 380, 420, 390],
+              color: (opacity = 1) => `rgba(251, 191, 36, ${opacity})`,
+              strokeWidth: 2
+            },
+            {
+              data: [150, 200, 120, 180, 100, 160],
+              color: (opacity = 1) => `rgba(248, 113, 113, ${opacity})`,
+              strokeWidth: 2
+            }
+          ]
+        },
+        insights: [
+          {
+            type: 'success',
+            title: 'Great Progress!',
+            message: 'Your wasted spending decreased by 12% this month',
+            color: '#22C55E',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          },
+          {
+            type: 'warning',
+            title: 'Watch Out',
+            message: 'Nice-to-have expenses are trending upward',
+            color: '#FBBF24',
+            backgroundColor: 'rgba(251, 191, 36, 0.1)',
+          },
+          {
+            type: 'info',
+            title: 'Recommendation',
+            message: 'Set a monthly limit of $400 for discretionary spending',
+            color: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          },
+        ]
       }
-    ]
+    };
+    return dataMap[period];
   };
+
+  const currentData = getDataForPeriod(selectedPeriod);
+  const overallSpendingData = currentData.overallSpending;
+  const trendData = currentData.trendData;
+  const insights = currentData.insights;
 
   const pieData = [
     {
@@ -108,30 +223,6 @@ const Analytics = () => {
     },
   };
 
-  const insights = [
-    {
-      type: 'success',
-      title: 'Great Progress!',
-      message: 'Your wasted spending decreased by 12% this month',
-      color: '#22C55E',
-      backgroundColor: 'rgba(34, 197, 94, 0.1)',
-    },
-    {
-      type: 'warning',
-      title: 'Watch Out',
-      message: 'Nice-to-have expenses are trending upward',
-      color: '#FBBF24',
-      backgroundColor: 'rgba(251, 191, 36, 0.1)',
-    },
-    {
-      type: 'info',
-      title: 'Recommendation',
-      message: 'Set a monthly limit of $400 for discretionary spending',
-      color: '#3B82F6',
-      backgroundColor: 'rgba(59, 130, 246, 0.1)',
-    },
-  ];
-
   const topCategories = [
     { name: 'Food & Dining', amount: '$487', percentage: 28, color: '#F87171' },
     { name: 'Transportation', amount: '$342', percentage: 20, color: '#3B82F6' },
@@ -154,6 +245,33 @@ const Analytics = () => {
           <View style={styles.headerIcon}>
             <Icon name="bar-chart-2" size={20} color="#9CA3AF" />
           </View>
+        </View>
+
+        {/* Period Selector */}
+        <View style={styles.periodSelectorContainer}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.periodScrollContent}
+          >
+            {periods.map((period) => (
+              <TouchableOpacity
+                key={period.id}
+                style={[
+                  styles.periodOption,
+                  selectedPeriod === period.id && styles.periodOptionSelected
+                ]}
+                onPress={() => setSelectedPeriod(period.id)}
+              >
+                <Text style={[
+                  styles.periodOptionText,
+                  selectedPeriod === period.id && styles.periodOptionTextSelected
+                ]}>
+                  {period.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
         {/* Spending Health Score */}
@@ -206,12 +324,8 @@ const Analytics = () => {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>Spending Trends</Text>
-            <View style={styles.periodSelector}>
+            <View style={styles.trendIcon}>
               <Icon name="trending-up" size={16} color="#22C55E" />
-              <TouchableOpacity style={styles.periodButton}>
-                <Text style={styles.periodText}>{selectedPeriod === '6months' ? '6M' : selectedPeriod}</Text>
-                <Icon name="chevron-down" size={12} color="#9CA3AF" />
-              </TouchableOpacity>
             </View>
           </View>
           
@@ -351,6 +465,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  periodSelectorContainer: {
+    marginBottom: 20,
+  },
+  periodScrollContent: {
+    paddingHorizontal: 24,
+    gap: 12,
+  },
+  periodOption: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    minWidth: 100,
+    alignItems: 'center',
+  },
+  periodOptionSelected: {
+    backgroundColor: 'rgba(34, 197, 94, 0.15)',
+    borderColor: '#22C55E',
+  },
+  periodOptionText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#9CA3AF',
+  },
+  periodOptionTextSelected: {
+    color: '#22C55E',
+    fontWeight: '600',
+  },
   card: {
     backgroundColor: '#1F2937',
     marginHorizontal: 24,
@@ -368,6 +512,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  trendIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   healthScoreContainer: {
     alignItems: 'center',
@@ -414,25 +562,6 @@ const styles = StyleSheet.create({
   legendText: {
     fontSize: 12,
     color: '#9CA3AF',
-  },
-  periodSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  periodButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    gap: 4,
-  },
-  periodText: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: '500',
   },
   chart: {
     borderRadius: 16,
