@@ -250,7 +250,7 @@ const Analytics = () => {
         {/* Period Selector */}
         <View style={styles.periodSelectorContainer}>
           <ScrollView 
-            horizontal 
+            horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.periodScrollContent}
           >
