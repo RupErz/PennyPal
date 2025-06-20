@@ -37,7 +37,7 @@ const Analytics = () => {
   const data = getAnalyticsData(selectedPeriod)
   const {overallSpending, trendData, healthScore, insights, topCategories} = data
 
-  console.log(trendData)
+  console.log(insights)
 
   // Calculating analytical details
   const must = overallSpending.mustHave
@@ -214,8 +214,31 @@ const Analytics = () => {
               </View>
             </View>
           </CardContainer>
-          {/* Smart Insights */}
 
+          {/* Smart Insights */}
+          <CardContainer
+            sectionLabel={"Smart Insights"}
+            iconCongig={
+              {name:"alert-triangle", size:20, color:Colors.yellowAlert}
+            }
+          >
+            <View style={styles.insightContainer}>
+              {insights.map((insight, index) => (
+                <View
+                  key={index}
+                  style={[styles.insightBackground, { backgroundColor: insight.backgroundColor }]}
+                >
+                  <View style={styles.insightContent}>
+                    <View style={[styles.insightDot, {backgroundColor: insight.color}]} />
+                    <View style={styles.insightText}>
+                      <Text style={[styles.insightTitle, {color: insight.color}]}>{insight.title}</Text>
+                      <Text style={styles.insightMessage}>{insight.message}</Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </CardContainer>
           {/* Spending Distribution */}
 
           {/* Top Categories */}
@@ -349,8 +372,42 @@ const styles = StyleSheet.create({
   },
   trendDetailText: {
     fontSize: 13,
-    fontWeight: '500',
     letterSpacing: 1.5,
     color: 'white'
   },
+  // Smart Insights
+  insightContainer: {
+    gap: 12
+  },
+  insightContent: {
+    gap: 12,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8
+  },
+  insightBackground: {
+    marginHorizontal: 8,
+    padding: 16,
+    marginBottom: 8,
+    borderRadius: 16,
+  },
+  insightText: {
+    gap: 4,
+  },
+  insightTitle: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    letterSpacing: 0.8
+  },
+  insightMessage: {
+    fontSize: 14,
+    color: 'white',
+    letterSpacing: 0.3
+  },
+  insightDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginTop: 6,
+  }
 })

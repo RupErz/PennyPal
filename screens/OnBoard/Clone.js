@@ -368,6 +368,7 @@ const Analytics = () => {
           <View style={styles.insightsContainer}>
             {insights.map((insight, index) => (
               <View key={index} style={[styles.insightCard, { backgroundColor: insight.backgroundColor }]}>
+                
                 <View style={styles.insightContent}>
                   <View style={[styles.insightDot, { backgroundColor: insight.color }]} />
                   <View style={styles.insightText}>
@@ -377,6 +378,7 @@ const Analytics = () => {
                     <Text style={styles.insightMessage}>{insight.message}</Text>
                   </View>
                 </View>
+              
               </View>
             ))}
           </View>
