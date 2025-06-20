@@ -37,6 +37,8 @@ const Analytics = () => {
   const data = getAnalyticsData(selectedPeriod)
   const {overallSpending, trendData, healthScore, insights, topCategories} = data
 
+  console.log(trendData)
+
   // Calculating analytical details
   const must = overallSpending.mustHave
   const nice = overallSpending.niceToHave
@@ -70,18 +72,20 @@ const Analytics = () => {
   }
 
   const chartConfig = {
-    backgroundColor: '#1F2937',
-    backgroundGradientFrom: '#1F2937',
-    backgroundGradientTo: '#111827',
+    backgroundColor: '#1F1927',
+    backgroundGradientFrom: '#1F1927',
+    backgroundGradientTo: '#0F0C1C', // slightly darker tone
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(156, 163, 175, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(156, 163, 175, ${opacity})`,
+    color: (opacity = 1) => `rgba(200, 200, 200, ${opacity})`, // soft gray for lines
+    labelColor: (opacity = 1) => `rgba(180, 180, 180, ${opacity})`, // subtle labels
     style: {
       borderRadius: 16,
     },
     propsForDots: {
-      r: '4',
+      r: '5',
       strokeWidth: '2',
+      // Let dot color be passed from your dataset!
+      // If static, remove fill and stroke here so chart uses dataset colors
     },
   };
 
@@ -125,7 +129,12 @@ const Analytics = () => {
           </View>
 
           {/* Spending Health Score */}
-          <CardContainer>
+          <CardContainer
+            sectionLabel={"Spending Health Score"}
+            iconCongig={
+              {name:'target' , size:20, color:Colors.textLightGray}
+            }
+          >
             <View style={styles.healthScoreContainer}>
               <View style={styles.chartWrapper}>
                 <ProgressChart
@@ -138,6 +147,7 @@ const Analytics = () => {
                     ...chartConfig,
                     color: (opacity = 1) => getHealthColor(healthScore),
                   }}
+                  style={styles.chartStyling}
                   hideLegend={true}
                 />
                 <View style={styles.healthScoreOverlay}>
@@ -166,17 +176,44 @@ const Analytics = () => {
                       <Text style={styles.categoryText}>Wasted: {formatPercentage(mustPercentage)}</Text>
                     </View>
                   </View>
-                  
-
-                  
               </View>
-              
-
-
             </View>
           </CardContainer>
-          {/* Trend Analysis */}
 
+          {/* Trend Analysis */}
+          <CardContainer
+            sectionLabel={"Spending Trends"}
+            iconCongig={
+              {name:"trending-up", size:16, color:Colors.onClickGreen}
+            }
+          >
+            <LineChart 
+              data={trendData}
+              width={chartWidth}
+              height={220}
+              chartConfig={chartConfig}
+              bezier
+              style={styles.chartStyling}
+              withDots={true}
+              withShadow={false}
+              withInnerLines={false}
+              withOuterLines={false}
+            />
+            <View style={styles.trendDetailContainer}>
+              <View style={styles.trendDetailItem}>
+                <View style={[styles.dot, {backgroundColor: Colors.must}]}/>
+                <Text style={styles.trendDetailText}>Must</Text>
+              </View>
+              <View style={styles.trendDetailItem}>
+                <View style={[styles.dot, {backgroundColor: Colors.nice}]}/>
+                <Text style={styles.trendDetailText}>Nice</Text>
+              </View>
+              <View style={styles.trendDetailItem}>
+                <View style={[styles.dot, {backgroundColor: Colors.wasted}]}/>
+                <Text style={styles.trendDetailText}>Wasted</Text>
+              </View>
+            </View>
+          </CardContainer>
           {/* Smart Insights */}
 
           {/* Spending Distribution */}
@@ -292,5 +329,28 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 12,
     color: 'white'
-  }
+  },
+  // Spending Trends
+  chartStyling: {
+    alignItems: 'center',
+    borderRadius: 18,
+    marginVertical: 5,
+  },
+  trendDetailContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  trendDetailItem: {
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  trendDetailText: {
+    fontSize: 13,
+    fontWeight: '500',
+    letterSpacing: 1.5,
+    color: 'white'
+  },
 })

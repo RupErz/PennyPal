@@ -3,13 +3,13 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../../constants/colors'
 import Icon from 'react-native-vector-icons/Feather';
 
-const CardContainer = ({children}) => {
+const CardContainer = ({children, sectionLabel, iconCongig}) => {
     return (
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.cardHeader}>
-                <Text style={styles.headerTitle}>Spending Health Score</Text>
-                <Icon name='target' size={20} color={"#9CA3AF"} />
+                <Text style={styles.headerTitle}>{sectionLabel}</Text>
+                <Icon {...iconCongig} />
             </View>
             {/* Body */}
             {children}
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     container: {
         paddingVertical: 20,
         paddingHorizontal: 17,
-        marginHorizontal: 24,
+        marginHorizontal: 18,
         marginBottom: 15,
         borderRadius: 18,
         backgroundColor: Colors.cardPurpleBlackBackground,

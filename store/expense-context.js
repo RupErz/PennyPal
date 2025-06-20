@@ -376,7 +376,7 @@ export const ExpenseContextProvider = ({children}) => {
                 },
                 {
                     data: wastedData,
-                    color: (opacity = 1) => `rgba(248, 113, 113, ${opacity})`,
+                    color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`,
                     strokeWidth: 2
                 }
             ]
