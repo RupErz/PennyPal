@@ -37,7 +37,7 @@ const Analytics = () => {
   const data = getAnalyticsData(selectedPeriod)
   const {overallSpending, trendData, healthScore, insights, topCategories} = data
 
-  console.log(overallSpending)
+  console.log(topCategories)
 
   // Calculating analytical details
   const must = overallSpending.mustHave
@@ -283,7 +283,36 @@ const Analytics = () => {
               style={styles.chartStyling}
             />
           </CardContainer>
+
           {/* Top Categories */}
+          <CardContainer
+            sectionLabel={"Top Spending Items"}
+            iconCongig={
+              {name:"list", size:20, color:Colors.textLightGray}
+            }
+          >
+            <View style={styles.topSpendingContainer}>
+              {topCategories.map((item, index) => (
+                <View
+                  key={index}
+                  style={styles.topSpendingItem}
+                >
+                  {/* Food and Dining */}
+                  <View style={styles.titleContainer}>
+                    <View style={[styles.topSpendingDot, {backgroundColor: item.color}]} />
+                    <Text style={styles.itemName}>{item.name}</Text>
+                  </View>
+
+                  {/* Expense and Percentage */}
+                  <View>
+                    <Text style={styles.itemName}>{item.amount}</Text>
+                    <Text style={styles.itemPercentage}>{item.percentage}%</Text>
+                  </View>
+                </View>
+              ))}
+
+            </View>
+          </CardContainer>
 
         </ScrollView>
         
@@ -451,5 +480,37 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     marginTop: 6,
+  },
+  // Top Spending Items
+  topSpendingContainer: {
+    gap: 12,
+  },
+  topSpendingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  topSpendingDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 15,
+    marginRight: 10,
+  },
+  itemName: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
+  itemPercentage: {
+    fontSize: 13,
+    color: Colors.textLightGray,
+    letterSpacing: 0.5,
+    alignSelf: 'flex-end',
   }
 })
