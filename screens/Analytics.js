@@ -37,7 +37,7 @@ const Analytics = () => {
   const data = getAnalyticsData(selectedPeriod)
   const {overallSpending, trendData, healthScore, insights, topCategories} = data
 
-  console.log(insights)
+  console.log(overallSpending)
 
   // Calculating analytical details
   const must = overallSpending.mustHave
@@ -88,6 +88,31 @@ const Analytics = () => {
       // If static, remove fill and stroke here so chart uses dataset colors
     },
   };
+
+  // Data for pie chart
+  const pieData = [
+    {
+      name: "Must Have",
+      expense: must,
+      color: "rgb(123, 241, 113)",
+      legendFontColor: Colors.textLightGray,
+      legendFontSize: 15
+    },
+    {
+      name: "Nice to Have",
+      expense: nice,
+      color: "rgb(239, 241, 109)",
+      legendFontColor: Colors.textLightGray,
+      legendFontSize: 15
+    },
+    {
+      name: "Wasted",
+      expense: wasted,
+      color: "rgb(229, 87, 69)",
+      legendFontColor: Colors.textLightGray,
+      legendFontSize: 15
+    }
+  ]
 
   // Calculate proper chart width accounting for card margins and padding
   const chartWidth = screenWidth - 88
@@ -239,8 +264,25 @@ const Analytics = () => {
               ))}
             </View>
           </CardContainer>
+          
           {/* Spending Distribution */}
-
+          <CardContainer
+            sectionLabel={"Spending Distribution"}
+            iconCongig={
+              {name:"pie-chart", size:20, color:Colors.textLightGray}
+            }
+          >
+            <PieChart 
+              data={pieData}
+              width={chartWidth}
+              height={220}
+              chartConfig={chartConfig}
+              accessor={"expense"}
+              backgroundColor={"transparent"}
+              paddingLeft={"15"}
+              style={styles.chartStyling}
+            />
+          </CardContainer>
           {/* Top Categories */}
 
         </ScrollView>
