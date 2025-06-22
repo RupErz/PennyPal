@@ -390,29 +390,73 @@ export const ExpenseContextProvider = ({children}) => {
         return Math.max(0, Math.min(100, score))
     }
 
+    // Smart function to group top categories by spending
+    const getSmartCategory = (title) => {
+        const titleLower = title.toLowerCase().trim()
+        
+        // Food & Dining
+        if (titleLower.includes('walmart') || titleLower.includes('target') || 
+            titleLower.includes('costco') || titleLower.includes('grocery') ||
+            titleLower.includes('supermarket') || titleLower.includes('food mart')) {
+            return 'Groceries & Shopping'
+        }
+        
+        if (titleLower.includes('restaurant') || titleLower.includes('mcdonald') || 
+            titleLower.includes('burger') || titleLower.includes('pizza') ||
+            titleLower.includes('starbucks') || titleLower.includes('cafe') ||
+            titleLower.includes('dining') || titleLower.includes('food')) {
+            return 'Food & Dining'
+        }
+        
+        // Entertainment & Gaming
+        if (titleLower.includes('game') || titleLower.includes('steam') || 
+            titleLower.includes('xbox') || titleLower.includes('playstation') ||
+            titleLower.includes('netflix') || titleLower.includes('spotify') ||
+            titleLower.includes('movie') || titleLower.includes('cinema')) {
+            return 'Entertainment'
+        }
+        
+        // Transportation
+        if (titleLower.includes('gas') || titleLower.includes('fuel') || 
+            titleLower.includes('uber') || titleLower.includes('lyft') ||
+            titleLower.includes('taxi') || titleLower.includes('parking')) {
+            return 'Transportation'
+        }
+        
+        // Utilities & Bills
+        if (titleLower.includes('electric') || titleLower.includes('water') || 
+            titleLower.includes('internet') || titleLower.includes('phone') ||
+            titleLower.includes('bill') || titleLower.includes('utility')) {
+            return 'Bills & Utilities'
+        }
+        
+        // If no match found, return the original title
+        // This ensures nothing gets lost
+        return title
+    }
+
     // Get top categories by total spending
     const getTopCategories = (period) => {
         const periodExpenses = getExpensesByPeriod(period)
         const totalAmount = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0)
         
-        // Group by actual category names (not must/nice/wasted)
         const categoryTotals = {}
         periodExpenses.forEach(expense => {
-            // Use title as category name since you don't have separate category field
-            const categoryName = expense.title || 'Other'
+            const categoryName = getSmartCategory(expense.title)
             categoryTotals[categoryName] = (categoryTotals[categoryName] || 0) + expense.amount
         })
 
-        // Convert to array and sort by amount
+        // Array destructuring ([variable A, variale B])
         const categoriesArray = Object.entries(categoryTotals)
             .map(([name, amount]) => ({
                 name,
                 amount: `$${amount.toFixed(0)}`,
                 percentage: Math.round((amount / totalAmount) * 100),
-                color: getCategoryColor(name) // You can implement this helper function
+                color: getCategoryColor(name),
+                rawAmount: amount
             }))
-            .sort((a, b) => parseFloat(b.amount.replace('$', '')) - parseFloat(a.amount.replace('$', '')))
-            .slice(0, 4) // Top 4 categories
+            .sort((a, b) => b.amount - a.amount)
+            .slice(0, 4)
 
         return categoriesArray
     }
