@@ -29,5 +29,11 @@ export const Colors = {
     lightBorder: '#e2e8f0',      // Light gray border
     // For Supporting History Screen
     cardPurpleBlackBackground: "#1F1927",
-    grayLine: "#444444"
+    grayLine: "#444444",
+    // Analytics
+    blackGray: '#FFFFFF0D',
+    blackGrayFadedBorder: "#FFFFFF1A",
+    onClickGreen: '#22C55E',
+    greenBackgroundOnClick:  "#22C55E26",
+    yellowAlert: "#FBBF24"
 }

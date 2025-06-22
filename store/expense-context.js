@@ -16,7 +16,15 @@ export const ExpenseContext = createContext({
     getExpensesGroupedByMonth: () => {},
     getExpensesByCategory: () => {},
     searchExpenses: () => {},
-    clearAllExpenses: () => {}
+    clearAllExpenses: () => {},
+    // Analytics support function
+    getExpensesByPeriod: () => {},
+    getSpendingDistribution: () => {},
+    getTrendData: () => {},
+    getHealthScore: () => {},
+    getTopCategories: () => {},
+    getSmartInsights: () => {},
+    getAnalyticsData: () => {}
 })
 
 export const ExpenseContextProvider = ({children}) => {
@@ -214,6 +222,332 @@ export const ExpenseContextProvider = ({children}) => {
         }
     }
 
+    // ========== NEW ANALYTICS FUNCTIONS ==========
+
+    // Get expenses for a specific period (current, 3months, 6months)
+    const getExpensesByPeriod = (period) => {
+        const now = new Date()
+        let startDate
+
+        switch (period) {
+            case 'current':
+                // From first day of current month to today
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+                break
+            case '3months':
+                // Last 90 days
+                startDate = new Date(now.getTime() - (90 * 24 * 60 * 60 * 1000))
+                break
+            case '6months':
+                // Last 180 days
+                startDate = new Date(now.getTime() - (180 * 24 * 60 * 60 * 1000))
+                break
+            default:
+                startDate = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000))
+        }
+
+        return expenses.filter(expense => {
+            const expenseDate = new Date(expense.date)
+            return expenseDate >= startDate && expenseDate <= now
+        }).sort((a, b) => new Date(b.date) - new Date(a.date))
+    }
+
+    // Get spending distribution by category type (must, nice, wasted)
+    const getSpendingDistribution = (period) => {
+        const periodExpenses = getExpensesByPeriod(period)
+        const totalAmount = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0)
+        
+        if (totalAmount === 0) {
+            return { mustHave: 0, niceToHave: 0, wasted: 0 }
+        }
+
+        const distribution = {
+            mustHave: 0,
+            niceToHave: 0,
+            wasted: 0
+        }
+
+        periodExpenses.forEach(expense => {
+            switch (expense.category) {
+                case 'must':
+                    distribution.mustHave += expense.amount
+                    break
+                case 'nice':
+                    distribution.niceToHave += expense.amount
+                    break
+                case 'wasted':
+                    distribution.wasted += expense.amount
+                    break
+            }
+        })
+
+        // Convert to percentages
+        return {
+            mustHave: Math.round((distribution.mustHave / totalAmount) * 100 * 10) / 10,
+            niceToHave: Math.round((distribution.niceToHave / totalAmount) * 100 * 10) / 10,
+            wasted: Math.round((distribution.wasted / totalAmount) * 100 * 10) / 10
+        }
+    }
+
+    // Get trend data for charts
+    const getTrendData = (period) => {
+        const periodExpenses = getExpensesByPeriod(period)
+        
+        if (periodExpenses.length === 0) {
+            return {
+                labels: [],
+                datasets: [
+                    { data: [], color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`, strokeWidth: 2 },
+                    { data: [], color: (opacity = 1) => `rgba(251, 191, 36, ${opacity})`, strokeWidth: 2 },
+                    { data: [], color: (opacity = 1) => `rgba(248, 113, 113, ${opacity})`, strokeWidth: 2 }
+                ]
+            }
+        }
+
+        let labels = []
+        let intervals = []
+
+        if (period === 'current') {
+            // Group by weeks in current month
+            const now = new Date()
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
+            const currentWeek = Math.ceil((now.getDate() + firstDay.getDay()) / 7)
+            
+            for (let i = 1; i <= currentWeek; i++) {
+                labels.push(`Week ${i}`)
+                const weekStart = new Date(firstDay.getTime() + ((i - 1) * 7 - firstDay.getDay()) * 24 * 60 * 60 * 1000)
+                const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000)
+                intervals.push({ start: weekStart, end: weekEnd })
+            }
+        } else if (period === '3months') {
+            // Group by months for last 3 months
+            const now = new Date()
+            for (let i = 2; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
+                labels.push(date.toLocaleDateString('default', { month: 'short' }))
+                const monthStart = new Date(date.getFullYear(), date.getMonth(), 1)
+                const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+                intervals.push({ start: monthStart, end: monthEnd })
+            }
+        } else if (period === '6months') {
+            // Group by months for last 6 months
+            const now = new Date()
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
+                labels.push(date.toLocaleDateString('default', { month: 'short' }))
+                const monthStart = new Date(date.getFullYear(), date.getMonth(), 1)
+                const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+                intervals.push({ start: monthStart, end: monthEnd })
+            }
+        }
+
+        const mustHaveData = []
+        const niceToHaveData = []
+        const wastedData = []
+
+        intervals.forEach(interval => {
+            const intervalExpenses = periodExpenses.filter(expense => {
+                const expenseDate = new Date(expense.date)
+                return expenseDate >= interval.start && expenseDate <= interval.end
+            })
+
+            const totals = { must: 0, nice: 0, wasted: 0 }
+            intervalExpenses.forEach(expense => {
+                totals[expense.category] = (totals[expense.category] || 0) + expense.amount
+            })
+
+            mustHaveData.push(totals.must)
+            niceToHaveData.push(totals.nice)
+            wastedData.push(totals.wasted)
+        })
+
+        return {
+            labels,
+            datasets: [
+                {
+                    data: mustHaveData,
+                    color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
+                    strokeWidth: 2
+                },
+                {
+                    data: niceToHaveData,
+                    color: (opacity = 1) => `rgba(251, 191, 36, ${opacity})`,
+                    strokeWidth: 2
+                },
+                {
+                    data: wastedData,
+                    color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`,
+                    strokeWidth: 2
+                }
+            ]
+        }
+    }
+
+    // Calculate health score
+    const getHealthScore = (period) => {
+        const distribution = getSpendingDistribution(period)
+        const score = Math.round(100 - (distribution.wasted * 2) - (distribution.niceToHave * 0.5))
+        return Math.max(0, Math.min(100, score))
+    }
+
+    // Smart function to group top categories by spending
+    const getSmartCategory = (title) => {
+        const titleLower = title.toLowerCase().trim()
+        
+        // Food & Dining
+        if (titleLower.includes('walmart') || titleLower.includes('target') || 
+            titleLower.includes('costco') || titleLower.includes('grocery') ||
+            titleLower.includes('supermarket') || titleLower.includes('food mart')) {
+            return 'Groceries & Shopping'
+        }
+        
+        if (titleLower.includes('restaurant') || titleLower.includes('mcdonald') || 
+            titleLower.includes('burger') || titleLower.includes('pizza') ||
+            titleLower.includes('starbucks') || titleLower.includes('cafe') ||
+            titleLower.includes('dining') || titleLower.includes('food')) {
+            return 'Food & Dining'
+        }
+        
+        // Entertainment & Gaming
+        if (titleLower.includes('game') || titleLower.includes('steam') || 
+            titleLower.includes('xbox') || titleLower.includes('playstation') ||
+            titleLower.includes('netflix') || titleLower.includes('spotify') ||
+            titleLower.includes('movie') || titleLower.includes('cinema')) {
+            return 'Entertainment'
+        }
+        
+        // Transportation
+        if (titleLower.includes('gas') || titleLower.includes('fuel') || 
+            titleLower.includes('uber') || titleLower.includes('lyft') ||
+            titleLower.includes('taxi') || titleLower.includes('parking')) {
+            return 'Transportation'
+        }
+        
+        // Utilities & Bills
+        if (titleLower.includes('electric') || titleLower.includes('water') || 
+            titleLower.includes('internet') || titleLower.includes('phone') ||
+            titleLower.includes('bill') || titleLower.includes('utility')) {
+            return 'Bills & Utilities'
+        }
+        
+        // If no match found, return the original title
+        // This ensures nothing gets lost
+        return title
+    }
+
+    // Get top categories by total spending
+    const getTopCategories = (period) => {
+        const periodExpenses = getExpensesByPeriod(period)
+        const totalAmount = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0)
+        
+        const categoryTotals = {}
+        periodExpenses.forEach(expense => {
+            const categoryName = getSmartCategory(expense.title)
+            categoryTotals[categoryName] = (categoryTotals[categoryName] || 0) + expense.amount
+        })
+
+        // Array destructuring ([variable A, variale B])
+        const categoriesArray = Object.entries(categoryTotals)
+            .map(([name, amount]) => ({
+                name,
+                amount: `$${amount.toFixed(0)}`,
+                percentage: Math.round((amount / totalAmount) * 100),
+                color: getCategoryColor(name),
+                rawAmount: amount
+            }))
+            .sort((a, b) => b.amount - a.amount)
+            .slice(0, 4)
+
+        return categoriesArray
+    }
+
+    // Helper function to assign colors to categories
+    const getCategoryColor = (categoryName) => {
+        const colors = ['#F87171', '#3B82F6', '#22C55E', '#FBBF24', '#8B5CF6', '#F59E0B']
+        const hash = categoryName.split('').reduce((a, b) => {
+            a = ((a << 5) - a) + b.charCodeAt(0)
+            return a & a
+        }, 0)
+        return colors[Math.abs(hash) % colors.length]
+    }
+
+    // Generate smart insights
+    const getSmartInsights = (period) => {
+        const distribution = getSpendingDistribution(period)
+        const healthScore = getHealthScore(period)
+        const insights = []
+
+        // Health score insights
+        if (healthScore >= 80) {
+            insights.push({
+                type: 'success',
+                title: 'Excellent!',
+                message: 'You\'re maintaining healthy spending habits',
+                color: '#22C55E',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            })
+        } else if (healthScore >= 60) {
+            insights.push({
+                type: 'warning',
+                title: 'Good Progress',
+                message: 'Your spending is on track, but could be optimized',
+                color: '#FBBF24',
+                backgroundColor: 'rgba(251, 191, 36, 0.1)',
+            })
+        } else {
+            insights.push({
+                type: 'warning',
+                title: 'Needs Attention',
+                message: 'Consider reducing unnecessary expenses',
+                color: '#F87171',
+                backgroundColor: 'rgba(248, 113, 113, 0.1)',
+            })
+        }
+
+        // Wasted spending insights
+        if (distribution.wasted > 15) {
+            insights.push({
+                type: 'warning',
+                title: 'High Waste',
+                message: `${distribution.wasted}% of spending is wasted - try to reduce`,
+                color: '#F87171',
+                backgroundColor: 'rgba(248, 113, 113, 0.1)',
+            })
+        } else if (distribution.wasted < 5) {
+            insights.push({
+                type: 'success',
+                title: 'Low Waste!',
+                message: 'You\'re doing great at avoiding wasteful spending',
+                color: '#22C55E',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            })
+        }
+
+        // Nice-to-have insights
+        if (distribution.niceToHave > 40) {
+            insights.push({
+                type: 'info',
+                title: 'Discretionary Spending',
+                message: 'Consider setting a limit for nice-to-have expenses',
+                color: '#3B82F6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            })
+        }
+
+        return insights
+    }
+
+    // Main analytics function that returns all data for a period
+    const getAnalyticsData = (period) => {
+        return {
+            overallSpending: getSpendingDistribution(period),
+            trendData: getTrendData(period),
+            healthScore: getHealthScore(period),
+            insights: getSmartInsights(period),
+            topCategories: getTopCategories(period)
+        }
+    }
+
     return (
         <ExpenseContext.Provider
             value={{
@@ -231,7 +565,15 @@ export const ExpenseContextProvider = ({children}) => {
                 getExpensesGroupedByMonth,
                 getExpensesByCategory,
                 searchExpenses,
-                clearAllExpenses
+                clearAllExpenses,
+                // Analytics support
+                getExpensesByPeriod,
+                getSpendingDistribution,
+                getTrendData,
+                getHealthScore,
+                getTopCategories,
+                getSmartInsights,
+                getAnalyticsData
             }}
         >
             {children}
