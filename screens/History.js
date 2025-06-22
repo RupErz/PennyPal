@@ -25,7 +25,14 @@ const History = () => {
             }))
         }))
     }, [getAvailableYears, getExpensesGroupedByMonth, monthlyIncome])
-    // console.log("Data type of year: ", typeof(sectionedData[0].title))
+
+    if (sectionedData.length === 0) {
+        return (
+            <View style={styles.fallBackContainer}>
+                <Text style={styles.fallBackText}>No data on records.</Text>
+            </View>
+        )
+    }
 
     // Data structure for SectionList:
     // [
@@ -136,5 +143,18 @@ const styles = StyleSheet.create({
     scrollContent: {
         paddingHorizontal: 20,
         paddingVertical: 20,
+    },
+    // Fallback container when no data is available
+    fallBackContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    fallBackText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: 'white',
+        letterSpacing: 1,
+        bottom: 50
     }
 })

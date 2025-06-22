@@ -325,7 +325,9 @@ export default Analytics
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingVertical: 15,
+
   },
   scrollContainer: {
     flex: 1
