@@ -264,28 +264,24 @@ const Analytics = () => {
             </View>
           </CardContainer>
           
-          {console.log("Pie Data: ", pieData)}
-          {console.log(pieData !== undefined)}
           {/* Spending Distribution */}
-          {pieData !== undefined && (
-            <CardContainer
-              sectionLabel={"Spending Distribution"}
-              iconCongig={
-                {name:"pie-chart", size:20, color:Colors.textLightGray}
-              }
-            >
-              <PieChart 
-                data={pieData}
-                width={chartWidth}
-                height={220}
-                chartConfig={chartConfig}
-                accessor={"expense"}
-                backgroundColor={"transparent"}
-                paddingLeft={"15"}
-                style={styles.chartStyling}
-              />
-            </CardContainer>
-            )}
+          <CardContainer
+            sectionLabel={"Spending Distribution"}
+            iconCongig={
+              {name:"pie-chart", size:20, color:Colors.textLightGray}
+            }
+          >
+            <PieChart 
+              data={pieData}
+              width={chartWidth}
+              height={220}
+              chartConfig={chartConfig}
+              accessor={"expense"}
+              backgroundColor={"transparent"}
+              paddingLeft={"15"}
+              style={styles.chartStyling}
+            />
+          </CardContainer>
 
           {/* Top Categories */}
           <CardContainer
