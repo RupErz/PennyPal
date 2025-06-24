@@ -37,8 +37,6 @@ const Analytics = () => {
   const data = getAnalyticsData(selectedPeriod)
   const {overallSpending, trendData, healthScore, insights, topCategories} = data
 
-  console.log(topCategories)
-
   // Calculating analytical details
   const must = overallSpending.mustHave
   const nice = overallSpending.niceToHave
@@ -181,6 +179,7 @@ const Analytics = () => {
                   </Text>
                 </View>
               </View>
+
               {/* Health Score Details */}
               <View style={styles.healthScoreDetail}>
                   <Text style={styles.healthScoreTitle}>Based on overall spending patterns</Text>

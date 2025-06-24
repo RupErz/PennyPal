@@ -24,6 +24,11 @@ const Home = ({navigation}) => {
         clearAllExpenses()
     }
     
+    const {resetUserData} = useContext(UserContext)
+    const clearUserData = () => {
+        resetUserData()
+    }
+
     // Creating Animations
     const fadeAnim = useRef(new Animated.Value(0)).current
     const slideAnim = useRef(new Animated.Value(50)).current
@@ -198,7 +203,10 @@ const Home = ({navigation}) => {
                     </View>
                 )}
 
+                {/* Button to clear expense data */}
                 <Button title='Press me to clear' onPress={clearData}/>
+                {/* Button to clear entire progress to go back OnBoarding */}
+                <Button title='Press me to go back onBoarding' onPress={clearUserData} />
             </Animated.View>
         </ScrollView>
         

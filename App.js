@@ -156,6 +156,28 @@ const AnalyticStack = () => {
   )
 }
 
+const SettingStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: Colors.title
+        },
+        cardStyle: {
+          backgroundColor: Colors.background
+        },
+        headerTintColor: 'white'
+      }}
+    >
+      <Stack.Screen 
+        name='Settings'
+        component={Settings}
+      />
+    </Stack.Navigator>
+  )
+}
+
 const MainAppTabs = () => {
   return (
     <Tab.Navigator
@@ -185,12 +207,11 @@ const MainAppTabs = () => {
         component={AnalyticStack} // Assuming Analytics is a standalone screen
         options={{
           title: "Analytics"
-          
         }}
       />
       <Tab.Screen 
         name='SettingsTab'
-        component={Settings}
+        component={SettingStack}
         options={{title: "Settings"}}
       />
     </Tab.Navigator>

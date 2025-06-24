@@ -35,5 +35,10 @@ export const Colors = {
     blackGrayFadedBorder: "#FFFFFF1A",
     onClickGreen: '#22C55E',
     greenBackgroundOnClick:  "#22C55E26",
-    yellowAlert: "#FBBF24"
+    yellowAlert: "#FBBF24",
+    // Settings
+    switchButtonUnactive: "#FFFFFF33",
+    // Notificaitons
+    semiTransparentWhite: "#FFFFFFB3",
+    
 }
