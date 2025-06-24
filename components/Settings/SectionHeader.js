@@ -12,7 +12,6 @@ const SectionHeader = ({icon, title, isValid, section}) => {
             {!isValid && section === "Financial" && (
                 <Text style={styles.invalid}>- Invalid input.</Text>
             )}
-            
         </View>
 )
 }

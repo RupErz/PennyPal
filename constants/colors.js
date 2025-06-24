@@ -38,4 +38,7 @@ export const Colors = {
     yellowAlert: "#FBBF24",
     // Settings
     switchButtonUnactive: "#FFFFFF33",
+    // Notificaitons
+    semiTransparentWhite: "#FFFFFFB3",
+    
 }

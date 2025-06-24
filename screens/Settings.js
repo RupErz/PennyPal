@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Alert, ScrollView, StatusBar, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
 import { UserContext } from '../store/user-context'
 import SectionHeader from '../components/Settings/SectionHeader'
@@ -10,21 +10,38 @@ import ManageButton from '../components/Settings/ManageButton'
 
 const Settings = () => {
     // userName : string, monthlyIncome : number
-    const {userName, monthlyIncome} = useContext(UserContext)
-    // Perhaps add a extra value for achievements and dailyReminder in UserContext
+    const {userName, monthlyIncome, currentAchievement, setUserName, setMonthlyIncome, setCurrentAchievement} = useContext(UserContext)
+    // Perhaps add a extra value for achievements in UserContext
 
 
     const [displayName, setDisplayName] = useState(userName || "Guest")
     // Convert income to string for TextInput
     const [displayIncome, setDisplayIncome] = useState(monthlyIncome.toString())
-    const [dailyReminders, setDailyReminders] = useState(true)
     const [isValidInput, setIsValidInput] = useState(true) // By default at settings, input all satisfied
     // Whether show the modal or not
     const [showAchievementPicker, setShowAchievementPicker] = useState(false)
-    const [selectedAchievement, setSelectedAchievement] = useState("God of Discipline")
+    const [selectedAchievement, setSelectedAchievement] = useState(currentAchievement || "Beginner Saver")
+
+    // Original Value in case user wants to cancel changes
+    const [originalName, setOriginalName] = useState(userName || "Guest");
+    const [originalIncome, setOriginalIncome] = useState(monthlyIncome.toString());
+    const [originalAchievement, setOriginalAchievement] = useState(currentAchievement || "Beginner Saver");
    
+    // When Settings screen mounts, set initial values
+    // This is to ensure that if the user has not set these values, they will be initialized properly
+    useEffect(() => {
+        setDisplayName(userName || "Guest");
+        setDisplayIncome(monthlyIncome.toString());
+        setSelectedAchievement(currentAchievement || "Beginner Saver");
+
+        setOriginalName(userName || "Guest");
+        setOriginalIncome(monthlyIncome.toString());
+        setOriginalAchievement(currentAchievement || "Beginner Saver");
+    }, [])
+
     // Achievements fetching from context
     const availableAchievements = [
+        "Beginner Saver",
         "God of Discipline",
         "Expense Guru",
         "Budget Master",
@@ -33,6 +50,27 @@ const Settings = () => {
         "Investment Pro",
     ]
 
+    // Formatted income input from user
+    const handleIncomeChange = (input) => {
+        setIsValidInput(true)
+        // Remove non-digit characters
+        const cleaned = input.replace(/[^\d.]/g, '');
+
+        // Allow empty string to avoid breaking input
+        if (cleaned === '') {
+            setDisplayIncome('');
+            return;
+        }
+
+        // Convert to number
+        const number = parseFloat(cleaned);
+        if (!isNaN(number)) {
+            // Format with commas (US-style)
+            const formatted = number.toLocaleString('en-US');
+            setDisplayIncome(formatted);
+        }
+    };
+
     // Handle Save and Cancel actions
     const handleSave = () => {
         // Input validation -----
@@ -40,11 +78,15 @@ const Settings = () => {
         const titleIsValid = displayName.trim().length > 0
 
         // Income can be empty, but if not, it must be a valid number
-        const cleanedAmount = displayIncome.replace(/\s/g, '').trim()
-        let amountIsValid = true
+        const cleanedAmount = displayIncome.replace(/,/g, '').replace(/\s/g, '').trim();
+        const numberValue = parseFloat(cleanedAmount);  
+
+        // Format it with commas again for display:
+        const formattedIncome = numberValue.toLocaleString('en-US');
+
+        let amountIsValid = true;
         if (cleanedAmount.length > 0) {
-            const parsedAmount = parseFloat(cleanedAmount)
-            amountIsValid = !isNaN(parsedAmount) && parsedAmount >= 0 && isFinite(parsedAmount)
+            amountIsValid = /^[0-9]+(\.[0-9]+)?$/.test(cleanedAmount);
         }
 
         if (!titleIsValid || !amountIsValid) {
@@ -57,6 +99,16 @@ const Settings = () => {
             "Your settings have been updated successfully",
             [{ text: "OK" }]
         )
+
+        // Save to context and AsyncStorage
+        setUserName(displayName);
+        setMonthlyIncome(numberValue);
+        setCurrentAchievement(selectedAchievement);
+
+        // ✅ Update backup values too
+        setOriginalName(displayName);
+        setOriginalIncome(formattedIncome);
+        setOriginalAchievement(selectedAchievement);
         console.log("Saved")
     }
 
@@ -66,7 +118,15 @@ const Settings = () => {
             "Are you sure you want to discard your changes?",
             [
                 {text: "Cancel", style: "cancel"},
-                {text: "Discard", style: "destructive"}
+                {text: "Discard", style: "destructive",
+                    onPress: () => {
+                        setDisplayName(originalName)
+                        setDisplayIncome(originalIncome)
+                        setSelectedAchievement(originalAchievement)
+                        setIsValidInput(true) // Reset validation state
+                        console.log("Changes discarded")
+                    }
+                }
             ]
         )
     }
@@ -82,10 +142,7 @@ const Settings = () => {
                     <TextInput
                         style={styles.input}
                         value={displayIncome}
-                        onChangeText={(income) => {
-                            setDisplayIncome(income)
-                            setIsValidInput(true)
-                        }}
+                        onChangeText={handleIncomeChange}
                         placeholder="Enter your monthly income"
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         keyboardType="numeric"
@@ -101,21 +158,6 @@ const Settings = () => {
                         }}
                         placeholder="Enter your name"
                         placeholderTextColor="rgba(255,255,255,0.5)"
-                    />
-                </SettingItem>
-
-                {/* Notifications */}
-                <SectionHeader icon="🔔" title="Notifications" section={"Notification"}/>
-                <SettingItem 
-                    icon="🔔" 
-                    label="Daily Reminders"
-                    description="Get reminded to track your expenses"
-                >
-                    <Switch
-                        value={dailyReminders}
-                        onValueChange={setDailyReminders}
-                        trackColor={{ false: Colors.switchButtonUnactive, true: Colors.onClickGreen }}
-                        thumbColor={dailyReminders ? '#ffffff' : '#f4f3f4'}
                     />
                 </SettingItem>
 
