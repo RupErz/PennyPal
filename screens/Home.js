@@ -48,21 +48,26 @@ const Home = ({navigation}) => {
 
     // Dynamic welcome message based on time of day
     const updateWelcomeMessage = () => {
-        const hour = new Date().getHours()
-        let timeGreeting = ''
+        const hour = new Date().getHours();
+        let timeGreeting = '';
+        let icon = '';
 
         if (hour >= 5 && hour < 12) {
-            timeGreeting = 'Good Morning'
+            timeGreeting = 'Good Morning';
+            icon = '☀️'; // morning sun
         } else if (hour >= 12 && hour < 17) {
-            timeGreeting = 'Good Afternoon'
+            timeGreeting = 'Good Afternoon';
+            icon = '🌤️'; // sun with some clouds
         } else if (hour >= 17 && hour < 21) {
-            timeGreeting = 'Good Evening'
+            timeGreeting = 'Good Evening';
+            icon = '🌇'; // sunset
         } else {
-            timeGreeting = 'Good Night'
+            timeGreeting = 'Good Night';
+            icon = '🌙'; // crescent moon
         }
 
-        const message = `${timeGreeting}${userName ? `, ${userName}` : ''} 👋`
-        setWelcomeMessage(message)
+        const message = `${timeGreeting}${userName ? `, ${userName} ${icon}` : ''}`;
+        setWelcomeMessage(message);
     }
 
     // Get Preview Expenses (top 6-8) : Empty list if no expenses
