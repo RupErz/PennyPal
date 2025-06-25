@@ -9,6 +9,7 @@ import PrimaryButton from '../components/PrimaryButton'
 import RecentExpenseCard from '../components/RecentExpenseCard'
 import { ExpenseContext } from '../store/expense-context'
 import CustomizedButton from '../components/HomeUpdate/CustomizedButton'
+import Icon from 'react-native-vector-icons/Feather'
 
 const Home = ({navigation}) => {
     // Monthly Income by default is 0 if empty
@@ -183,12 +184,13 @@ const Home = ({navigation}) => {
                 {/* Header */}
                 <View style={styles.header}>
                     <View style={styles.dateContainer}>
-                        <Image source={require('../assets/clock.png')} style={styles.clockIcon} />
-                        <Title
+                        <Icon name="clock" size={18} color={Colors.textLightGray} style={styles.clockIcon}/>
+                        <Text style={styles.dateText}>{current_date}</Text>
+                        {/* <Title
                             style={styles.dateText}
                         >
                             {current_date}
-                        </Title>
+                        </Title> */}
                     </View>  
 
                     <Text style={styles.welcomeText}>
@@ -241,15 +243,7 @@ const Home = ({navigation}) => {
                         expenseData={categoryData}
                     />
                 )}
-
-                {/* Quick Add Expense Action */}
-                <View style={styles.quickActionCard}>
-                    <Text style={styles.quickActionTitle}>Track Today's Spending</Text>
-                    <Text style={styles.quickActionSubtitle}>Keep your streak going! 🎯</Text>
-                    <PrimaryButton onPress={onPressAddButton}>+ Add Expense</PrimaryButton>
-                </View>
-
-
+                
                 {/* Show prompt if no income is set */}
                 {(!monthlyIncome || monthlyIncome === 0) && (
                     <View style={styles.incomePrompt}>
@@ -260,7 +254,7 @@ const Home = ({navigation}) => {
                 )}
 
                 {/* Button to clear expense data */}
-                <Button title='Press me to clear' onPress={clearData}/>
+                <Button title='Press me to clear' onPress={clearData} style={{marginTop: 50}}/>
                 {/* Button to clear entire progress to go back OnBoarding */}
                 <Button title='Press me to go back onBoarding' onPress={clearUserData} />
             </Animated.View>
@@ -276,40 +270,51 @@ const styles = StyleSheet.create({
         flex: 1, 
         justifyContent: 'flex-start',
         alignContent: 'center',
-        padding: 8,
-        gap: 5
+        gap: 5,
     },
     header : {
-        paddingHorizontal: 16,
-        paddingBottom: 8
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 15,
+        backgroundColor: '#1a1a1a',
+        borderBottomLeftRadius: 25,
+        borderBottomRightRadius: 25,
+        borderBottomColor: Colors.textLightGray,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        paddingVertical: 20,
+        paddingHorizontal: 15,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     dateContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         paddingVertical: 8
     },
     clockIcon: {
-        width: 30,
-        height: 30,
         marginRight: 8,
         tintColor: Colors.title // Make our clock color match the theme
     },
     dateText: {
-        fontSize: 16,
-        color: Colors.subTitle,
-        fontWeight: 500
+        fontSize: 22,
+        color: Colors.textLightGray,
+        fontWeight: '500'
     },
     welcomeText: {
-        color: Colors.text,
-        fontSize: 22,
+        color: 'white',
+        fontSize: 26,
         fontWeight: "bold",
         textAlign: 'left',
         marginVertical: 12,
         paddingBottom: 16,
-        borderBottomColor: Colors.title,
-        borderBottomWidth: 2,
-        marginBottom: 8
+        marginBottom: 8,
+        letterSpacing: 0.5
     },
     content: {
         flex: 1,
@@ -320,6 +325,7 @@ const styles = StyleSheet.create({
     incomePrompt: {
         backgroundColor: Colors.cardBackground,
         padding: 12,
+        marginTop: 10,
         borderRadius: 8,
         borderLeftWidth: 4,
         borderLeftColor: Colors.buttonBackground,
@@ -341,73 +347,10 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        backgroundColor: Colors.background
+        backgroundColor: Colors.background,
     },
     contentContainer: {
-        paddingVertical: 16,
         paddingBottom: 100,
-    },
-
-    // Badge and Streak
-    badgeContainer: {
-        flexDirection: 'row',
-        paddingHorizontal: 16,
-        gap: 12,
-        marginBottom: 8
-    },
-    streakBadge: {
-        flex: 1,
-        backgroundColor: Colors.cardBackground,
-        padding: 16,
-        borderRadius: 12,
-        alignItems: 'center',
-        borderLeftWidth: 4,
-        borderLeftColor: Colors.orange,
-        elevation: 2,
-        shadowColor: 2,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4
-    },
-    streakEmoji: {
-        fontSize: 24,
-        marginBottom: 4
-    },
-    streakNumber: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: Colors.text,
-        marginBottom: 2
-    },
-    streakText: {
-        fontSize: 12,
-        color: Colors.subTitle,
-        fontWeight: '500'
-    },
-    achievementBadge: {
-        flex: 1,
-        backgroundColor: Colors.cardBackground,
-        padding: 16,
-        borderRadius: 12,
-        alignItems: 'center',
-        borderLeftWidth: 4,
-        borderLeftColor: Colors.yellow,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4
-    },
-    badgeEmoji: {
-        fontSize: 24,
-        marginBottom: 8
-    },
-    badgeText: {
-        fontSize: 12,
-        color: Colors.text,
-        fontWeight: '600',
-        textAlign: 'center'
     },
     // Motivational Message
     motivationalCard: {
@@ -440,38 +383,12 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     
-    // Add Expense 
-    quickActionCard: {
-        backgroundColor: Colors.cardBackground,
-        marginHorizontal: 16,
-        marginVertical: 16,
-        padding: 20,
-        borderRadius: 12,
-        alignItems: 'center',
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 6,
-    },
-    quickActionTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
-        marginBottom: 4
-    },
-    quickActionSubtitle: {
-        fontSize: 14,
-        color: 'white',
-        opacity: 0.9,
-        marginBottom: 16
-    },
     // Primary Actions Container
     primaryActionsContainer: {
         flexDirection: 'row',
         paddingHorizontal: 16,
         gap: 12,
-        marginBottom: 12,
+        marginBottom: 20,
     },
     primaryActionsButton: {
         fontSize: 18,
