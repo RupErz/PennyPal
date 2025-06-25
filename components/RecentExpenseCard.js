@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Colors } from '../constants/colors'
-import { formatCurrency } from '../util/utility'
+import { formatCurrency, formatDate } from '../util/utility'
 import { useNavigation } from '@react-navigation/native'
 
 const RecentExpenseCard = ({title, recentExpenses}) => {
@@ -36,7 +36,7 @@ const RecentExpenseCard = ({title, recentExpenses}) => {
                         <Text style={styles.expenseIcon}>{getCategoryIcon(expense.category)}</Text>
                         <View>
                             <Text style={styles.expenseTitle}>{expense.title}</Text>
-                            <Text style={styles.expenseDate}>{expense.date}</Text>
+                            <Text style={styles.expenseDate}>{formatDate(expense.date)}</Text>
                         </View>
                     </View>
                     <Text style={styles.expenseAmount}>$ {formatCurrency(expense.amount)}</Text>

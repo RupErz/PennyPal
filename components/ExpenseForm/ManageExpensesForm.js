@@ -109,11 +109,10 @@ const ManageExpensesForm  = ({defaultValue, onSubmit, submitButtonLabel, onDelet
     
     const inputChangeHandler = (inputIdentifier, enteredData) => {
         setInputs((curInputValues) => {
-            const newInputs = {
+            return {
                 ...curInputValues,
                 [inputIdentifier]: { value: enteredData, isValid: true }
             }
-            return newInputs
         })
     }
 

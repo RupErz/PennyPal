@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
 import { Animated, Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ExpenseCard from '../components/ExpenseCard'
 import { UserContext } from '../store/user-context'
-import { formatCurrency, getCurrentDate } from '../util/utility'
+import { formatCurrency, formatCurrency2Digits, getCurrentDate } from '../util/utility'
 import Title from '../components/Title'
 import { Colors } from '../constants/colors'
 import PrimaryButton from '../components/PrimaryButton'
@@ -10,7 +10,13 @@ import RecentExpenseCard from '../components/RecentExpenseCard'
 import { ExpenseContext } from '../store/expense-context'
 
 const Home = ({navigation}) => {
+    // Monthly Income by default is 0 if empty
     const {userName, monthlyIncome} = useContext(UserContext)
+    const {getExpensesByMonth, getTotalExpensesByMonth, getExpensesByCategory} = useContext(ExpenseContext)
+
+    // Get total expense for the CURRENT month
+    const totalSpent = getTotalExpensesByMonth(new Date().getFullYear(), new Date().getMonth())
+    const monthExpenses = getExpensesByMonth(new Date().getFullYear(), new Date().getMonth())
     
     useLayoutEffect(() => {
         navigation.getParent()?.setOptions({
@@ -33,21 +39,25 @@ const Home = ({navigation}) => {
     const fadeAnim = useRef(new Animated.Value(0)).current
     const slideAnim = useRef(new Animated.Value(50)).current
 
+    // Balance Calculation: Only if monthlyIncome is available
+    const balance = monthlyIncome && monthlyIncome > 0 ? monthlyIncome - totalSpent : "-"
 
-    // Mock data for now, will replace with data from context / database later
-    const totalSpent = 15000 
-    const balance = monthlyIncome && monthlyIncome > 0 ? monthlyIncome - totalSpent : null
-
-    // Mock streak and badge data
+    // Mock streak and badge data : Might replace with something since we don't have any data related
     const streakDays = 5
     const currentBadge = "Balanced Week"
 
-    // Mock recentExpenses data 
-    const recentExpenses = [
-        { id: 1, title: "Coffee", amount: 150, date: "Today", category: "nice" },
-        { id: 2, title: "Groceries", amount: 2500, date: "Yesterday", category: "must" },
-        { id: 3, title: "Movie ticket", amount: 450, date: "Dec 1", category: "wasted" }
-    ]
+    // Get Preview Expenses (top 6-8) : Empty list if no expenses
+    const getRecentExpenseItem = () => {
+        if (!monthExpenses || monthExpenses.length === 0) return []
+
+        // Sort by date (most recent one) take top 6
+        const sortedByDate = [...monthExpenses]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 3)
+        
+        return sortedByDate
+    }
+    const recentExpenses = getRecentExpenseItem()
 
     // Motivational messages based on spending patterns
     const getMotivationalMessage = () => {
@@ -65,15 +75,14 @@ const Home = ({navigation}) => {
             return { message: "🚨 You've exceeded your budget! Time to cut back.", type: "critical" }
         }
     }
-
     const motivationalMsg = getMotivationalMessage()
 
     const createFinanceData = () => {
         const hasIncome = monthlyIncome && monthlyIncome > 0
         return [
             {
-                label: "Income",
-                expense: hasIncome ? formatCurrency(monthlyIncome) : "xxxx"
+                label: "Monthly Income",
+                expense: hasIncome ? formatCurrency(monthlyIncome) : "-"
             },
             {
                 label: "Spent",
@@ -81,19 +90,29 @@ const Home = ({navigation}) => {
             },
             {
                 label: "Balance",
-                expense: hasIncome ? formatCurrency(balance) : "xxxx"
+                expense: hasIncome ? formatCurrency(balance) : "-"
             }
         ]
     }
-    
     const userFinance = createFinanceData()
 
     // Create category breakdown data (mock for now - will be fetched from user data later)
-    const categoryData = [
-        { label: "Must Have", expense: "xxxx", type: "must" },
-        { label: "Nice to Have", expense: "xxxx", type: "nice" },
-        { label: "Wasted", expense: "xxxx", type: "wasted" }
-    ]
+    const totalAmountByCategory = getExpensesByCategory(new Date().getFullYear(), new Date().getMonth())
+    const categoryData = totalAmountByCategory.map((category) => ({
+        label: 
+            category.category === "must"
+            ? "Must Have"
+            : category.category === "nice"
+            ? "Nice to Have"
+            : "Wasted", 
+        expense: formatCurrency(category.total),
+        type: category.category
+    }))
+    // const categoryData = [
+    //     { label: "Must Have", expense: "xxxx", type: "must" },
+    //     { label: "Nice to Have", expense: "xxxx", type: "nice" },
+    //     { label: "Wasted", expense: "xxxx", type: "wasted" }
+    // ]
 
     const current_date = getCurrentDate()
 
@@ -175,16 +194,20 @@ const Home = ({navigation}) => {
                 />
 
                 {/* Recent Expenses Preview */}
-                <RecentExpenseCard
-                    title={"Recent Expenses"}
-                    recentExpenses={recentExpenses}
-                />
+                {recentExpenses.length > 0 && (
+                    <RecentExpenseCard
+                        title={"Recent Expenses"}
+                        recentExpenses={recentExpenses}
+                    />
+                )}
 
                 {/* Spending Category Card */}
-                <ExpenseCard 
-                    title="Spending Categories"
-                    expenseData={categoryData}
-                />
+                {categoryData.length > 0 && (
+                    <ExpenseCard 
+                        title="Spending Categories"
+                        expenseData={categoryData}
+                    />
+                )}
 
                 {/* Quick Add Expense Action */}
                 <View style={styles.quickActionCard}>
