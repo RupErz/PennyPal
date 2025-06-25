@@ -3,10 +3,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../constants/colors'
 
 
-const Title = ({ children, marginTop }) => {
+const Title = ({ children, marginTop, style }) => {
     return (
         <View style={[styles.container, {marginTop: marginTop}]}>
-            <Text style={styles.title}>{children}</Text>
+            <Text style={[styles.title, style]}>{children}</Text>
         </View>
     )
 }
