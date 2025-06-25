@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Animated, Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ExpenseCard from '../components/ExpenseCard'
 import { UserContext } from '../store/user-context'
@@ -8,11 +8,14 @@ import { Colors } from '../constants/colors'
 import PrimaryButton from '../components/PrimaryButton'
 import RecentExpenseCard from '../components/RecentExpenseCard'
 import { ExpenseContext } from '../store/expense-context'
+import CustomizedButton from '../components/HomeUpdate/CustomizedButton'
 
 const Home = ({navigation}) => {
     // Monthly Income by default is 0 if empty
     const {userName, monthlyIncome} = useContext(UserContext)
     const {getExpensesByMonth, getTotalExpensesByMonth, getExpensesByCategory} = useContext(ExpenseContext)
+
+    const [welcomeMessage, setWelcomeMessage] = useState("")    
 
     // Get total expense for the CURRENT month
     const totalSpent = getTotalExpensesByMonth(new Date().getFullYear(), new Date().getMonth())
@@ -42,9 +45,24 @@ const Home = ({navigation}) => {
     // Balance Calculation: Only if monthlyIncome is available
     const balance = monthlyIncome && monthlyIncome > 0 ? monthlyIncome - totalSpent : "-"
 
-    // Mock streak and badge data : Might replace with something since we don't have any data related
-    const streakDays = 5
-    const currentBadge = "Balanced Week"
+    // Dynamic welcome message based on time of day
+    const updateWelcomeMessage = () => {
+        const hour = new Date().getHours()
+        let timeGreeting = ''
+
+        if (hour >= 5 && hour < 12) {
+            timeGreeting = 'Good Morning'
+        } else if (hour >= 12 && hour < 17) {
+            timeGreeting = 'Good Afternoon'
+        } else if (hour >= 17 && hour < 21) {
+            timeGreeting = 'Good Evening'
+        } else {
+            timeGreeting = 'Good Night'
+        }
+
+        const message = `${timeGreeting}${userName ? `, ${userName}` : ''} 👋`
+        setWelcomeMessage(message)
+    }
 
     // Get Preview Expenses (top 6-8) : Empty list if no expenses
     const getRecentExpenseItem = () => {
@@ -117,6 +135,9 @@ const Home = ({navigation}) => {
     const current_date = getCurrentDate()
 
     useEffect(() => {
+        // Update welcome message when first launch
+        updateWelcomeMessage()
+
         // Entrance animations
         Animated.parallel([
             Animated.timing(fadeAnim, {
@@ -130,7 +151,11 @@ const Home = ({navigation}) => {
                 useNativeDriver: true
             }),
         ]).start()
-    }, [])
+
+        // Update welcome message every hour
+        const interval = setInterval(updateWelcomeMessage, 3600000) // Update every hour
+        return () => clearInterval(interval)
+    }, [userName])
 
     const onPressAddButton = () => {
         const today = new Date()
@@ -139,7 +164,11 @@ const Home = ({navigation}) => {
             defaultYear: today.getMonth() // Month index
         }) // Change to ManageExpense
     }
-    
+
+    const onPressViewAll = () => {
+        navigation.navigate("MonthlySummary") // Navigate to Monthly Summary Screen
+    }
+    console.log(welcomeMessage)
 
     return (
         <ScrollView
@@ -163,21 +192,25 @@ const Home = ({navigation}) => {
                     </View>  
 
                     <Text style={styles.welcomeText}>
-                        Welcome back{userName ? `,${userName}` : ''}! 👋
+                        {welcomeMessage}
                     </Text>
                 </View>
 
-                {/* Badge/Streak Section */}
-                <View style={styles.badgeContainer}>
-                    <View style={styles.streakBadge}>
-                        <Text style={styles.streakEmoji}>🔥</Text>
-                        <Text style={styles.streakNumber}>{streakDays}</Text>
-                        <Text style={styles.streakText}>Day Streak</Text>
-                    </View>
-                    <View style={styles.achievementBadge}>
-                        <Text style={styles.badgeEmoji}>🏆</Text>
-                        <Text style={styles.badgeText}>{currentBadge}</Text>
-                    </View>
+                {/* Quick Access Buttons  */}
+                <View style={styles.primaryActionsContainer}>
+                    <CustomizedButton
+                        onPress={onPressAddButton}
+                        type={"Add"}
+                    >
+                        <Text style={styles.primaryActionsButton}>➕</Text>
+                        <Text style={styles.primaryActionsContent}>Add Expense</Text>
+                    </CustomizedButton>
+                    <CustomizedButton
+                        onPress={onPressViewAll}
+                    >
+                        <Text style={styles.primaryActionsButton}>📊</Text>
+                        <Text style={styles.primaryActionsContent}>View Summary</Text>
+                    </CustomizedButton>
                 </View>
 
                 {/* Motivational Message */}
@@ -432,5 +465,21 @@ const styles = StyleSheet.create({
         color: 'white',
         opacity: 0.9,
         marginBottom: 16
+    },
+    // Primary Actions Container
+    primaryActionsContainer: {
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        gap: 12,
+        marginBottom: 12,
+    },
+    primaryActionsButton: {
+        fontSize: 18,
+        color: 'white'
+    },
+    primaryActionsContent: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: '600'
     }
 })

@@ -40,5 +40,5 @@ export const Colors = {
     switchButtonUnactive: "#FFFFFF33",
     // Notificaitons
     semiTransparentWhite: "#FFFFFFB3",
-    
+    blueWhite: "#3B82F6"
 }
