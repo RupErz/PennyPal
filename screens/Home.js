@@ -17,6 +17,7 @@ const Home = ({navigation}) => {
     const {userName, monthlyIncome} = useContext(UserContext)
     const {getExpensesByMonth, getTotalExpensesByMonth, getExpensesByCategory} = useContext(ExpenseContext)
 
+    console.log("User income: ", monthlyIncome)
     const [welcomeMessage, setWelcomeMessage] = useState("")    
 
     // Get total expense for the CURRENT month

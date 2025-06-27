@@ -183,7 +183,7 @@ const Benefits = ({navigation}) => {
                         {[
                             { text: 'Track Expenses', anim: cardAnimations[0]},
                             { text: 'See Insights', anim: cardAnimations[1]},
-                            { text: 'Be Aware', anim: cardAnimations[2]},
+                            { text: 'Smart Summaries', anim: cardAnimations[2]},
                         ].map((item, index) => (
                             <Animated.View
                                 key={index}

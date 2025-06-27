@@ -140,47 +140,63 @@ const GetIncome = ({route, navigation}) => {
   }
 
   const incomeConsent = () => {
-    // If user press "I Consent" button -> They cannot leave empy input
     if (!stringIncome.trim()) {
-      setErrorMessage("Income cannot be empty if you consent")
+      setErrorMessage("Income cannot be empty if you consent");
       return;
     }
 
-    // Replace commas with dots
-    let normalized = stringIncome.replace(/,/g, '.').trim();
+    // Step 1: Remove all spaces
+    let input = stringIncome.trim().replace(/\s/g, '');
 
-    // Remove spaces and keep digits and only the first dot
-    let clean = "";
-    let dotFound = false;
-    for (let i = 0; i < normalized.length; i++) {
-      const char = normalized[i];
-      if (char >= '0' && char <= '9') {
-        clean += char;
-      } else if (char === '.' && !dotFound) {
-        clean += '.';
-        dotFound = true;
+    // Step 2: If input contains commas AND dots
+    if (input.includes(',') && input.includes('.')) {
+      // Assume last separator (dot or comma) is decimal separator
+      const lastDot = input.lastIndexOf('.');
+      const lastComma = input.lastIndexOf(',');
+
+      const decimalSeparator = lastDot > lastComma ? '.' : ',';
+
+      // Remove all thousands separators (either ',' or '.') except the decimal separator
+      input = input
+        .split('')
+        .filter((char, idx) => {
+          if (char === '.' || char === ',') {
+            return idx === (decimalSeparator === '.' ? lastDot : lastComma);
+          }
+          return true;
+        })
+        .join('');
+
+      // Replace decimal separator with dot if needed (if decimal separator was comma)
+      if (decimalSeparator === ',') {
+        input = input.replace(',', '.');
       }
-      // Ignore everything else (like spaces, extra dots, etc.)
-    }
 
-    const parsed = parseFloat(clean);
+    } else if (input.includes(',')) {
+      // Only commas exist, assume commas are thousands separators, remove all commas
+      input = input.replace(/,/g, '');
+    }
+    // else only dots or no separators → keep as is (dot is decimal separator)
+
+    const parsed = parseFloat(input);
+
     console.log("Parsed:", parsed);
 
     if (isNaN(parsed) || parsed <= 0) {
-      setErrorMessage("Please enter a valid income amount");
+      setErrorMessage("Please enter a valid income amount using '.' as decimal separator");
       return;
     }
 
-    // Success animation before navigation
-    animateSuccess()
-    
+    animateSuccess();
+
     setTimeout(() => {
       setIncomeInput(parsed);
-      setMonthlyIncome(parsed);
-      setOnboardingStep("GetReady")
+      setMonthlyIncome(parsed); // Store as number
+      setOnboardingStep("GetReady");
       navigation.navigate("GetReadyScreen");
-    }, 300)
-  }
+    }, 300);
+  };
+
 
   const incomeSkip = () => {
     setIncomeInput(0) // Set to empty value
@@ -224,8 +240,9 @@ const GetIncome = ({route, navigation}) => {
         />
       </Animated.View>
       
-      <Text style={styles.hintMessage}>E.g: 12 500.50 - use either dot or comma not both!</Text>
-      
+      <Text style={styles.hintMessage}>Please enter your income using digits only.</Text>
+      <Text style={styles.hintMessage}>Use a dot (.) as the decimal separator for cents.</Text>
+      <Text style={styles.hintMessage}>E.g: 12 000 / 12000 / 12 000.56 </Text>
       <View style={styles.errorMsgContainer}>
         {errorMessage !== "" && (
           <Animated.Text 
