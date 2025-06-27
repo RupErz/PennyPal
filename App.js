@@ -21,6 +21,7 @@ import { ExpenseContextProvider } from './store/expense-context';
 import AllExpenses from './screens/AllExpenses';
 import ManageExpense from './screens/ManageExpense';
 import Loading from './screens/Loading';
+import Icon from 'react-native-vector-icons/Ionicons'; // or MaterialIcons, FontAwesome, etc.
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -187,33 +188,58 @@ const MainAppTabs = () => {
         // For styling tab bar
         headerTintColor: 'white',
         tabBarStyle: {
-          backgroundColor: Colors.background // Tab bar background
+          backgroundColor: Colors.background, // Tab bar background
+          height: 70,
+          paddingBottom: 10,
+          paddingTop: 2,
+          borderTopWidth: 1,
+          borderTopColor: '#333'
         },
         tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "gray"
+        tabBarInactiveTintColor: "gray",
+        tabBarLabelStyle: {
+          marginTop: 3
+        }
       }}
     >
       <Tab.Screen 
         name='HomeTab'
         component={HomeStack} // Using HomeStack to include Home, ManageExpense, and History
-        options={{title: "Home"}}
+        options={{
+          title: "Home",
+          tabBarIcon: ({focused, color}) => (
+            <Icon name={focused ? "home" : "home-outline"} size={22} color={color} />
+          )
+        }}
       />
       <Tab.Screen 
         name='HistoryTab'
         component={HistoryStack}
-        options={{title: "History"}}
+        options={{
+          title: "History",
+          tabBarIcon: ({focused, color}) => (
+            <Icon name={focused ? "time" : "time-outline"} size={22} color={color} />
+          )
+        }}
       />
       <Tab.Screen 
         name='AnalyticsTab'
         component={AnalyticStack} // Assuming Analytics is a standalone screen
         options={{
-          title: "Analytics"
+          title: "Analytics",
+          tabBarIcon: ({focused, color}) => (
+            <Icon name={focused ? "bar-chart" : "bar-chart-outline"} size={22} color={color} />
+          )
         }}
       />
       <Tab.Screen 
         name='SettingsTab'
         component={SettingStack}
-        options={{title: "Settings"}}
+        options={{title: "Settings",
+          tabBarIcon: ({focused, color}) => (
+            <Icon name={focused ? "settings" : "settings-outline"} size={24} color={color} />
+          )
+        }}
       />
     </Tab.Navigator>
   )
@@ -267,12 +293,6 @@ const OnBoardingStack = ({setHasOnBoarded}) => {
 const MainNavigator = () => {
   const {userName, monthlyIncome, hasCompletedOnboarding, onboardingStep, isLoading} = useContext(UserContext)
   const [hasOnBoarded, setHasOnBoarded] = useState(null)
-
-  // Debugging logs
-  // console.log(userName)
-  // console.log(monthlyIncome)
-  // console.log(hasCompletedOnboarding)
-  // console.log(onboardingStep)
 
   // Loading state
   useEffect(() => {
