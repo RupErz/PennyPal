@@ -244,14 +244,13 @@ const GetIncome = ({route, navigation}) => {
 
       <PrimaryButton onPress={incomeConsent}>I Consent</PrimaryButton>
       
-      <TouchableOpacity
+      <PrimaryButton 
+        onPress={incomeSkip}
         onPressIn={startWarningPulse}
         onPressOut={stopWarningPulse}
-        onPress={incomeSkip}
-        activeOpacity={0.8}
       >
-        <PrimaryButton>Skip for now</PrimaryButton>
-      </TouchableOpacity>
+        Skip for now
+      </PrimaryButton>
       
       <Animated.View 
         style={[
