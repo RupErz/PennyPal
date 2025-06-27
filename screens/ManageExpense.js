@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import ManageExpensesForm from '../components/ExpenseForm/ManageExpensesForm'
 import { ExpenseContext } from '../store/expense-context'
 import ErrorOverlay from '../components/ExpenseForm/ErrorOverlay'
+import Loading from './Loading'
 const ManageExpense = ({navigation, route}) => {
     const {addExpense, updateExpense, deleteExpense, expenses} = useContext(ExpenseContext)
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -46,7 +47,7 @@ const ManageExpense = ({navigation, route}) => {
 
     // Handle loading state while updating / managing expense
     if (isSubmitting) {
-        return <View style={{ flex: 1, backgroundColor: "#000" }} />;
+        return <Loading />;
     }
 
     // Handle Error State

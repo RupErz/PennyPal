@@ -175,13 +175,6 @@ const Home = ({navigation}) => {
     const onPressViewAll = () => {
         navigation.navigate("MonthlySummary") // Navigate to Monthly Summary Screen
     }
-    console.log(welcomeMessage)
-    const isLoading = true
-    if (isLoading) {
-        return (
-            <Loading />
-        )
-    }
 
     return (
         <ScrollView

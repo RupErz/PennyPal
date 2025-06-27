@@ -20,6 +20,7 @@ import { UserContext, UserContextProvider } from './store/user-context';
 import { ExpenseContextProvider } from './store/expense-context';
 import AllExpenses from './screens/AllExpenses';
 import ManageExpense from './screens/ManageExpense';
+import Loading from './screens/Loading';
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -283,7 +284,7 @@ const MainNavigator = () => {
   // Will fix this later, make a custom loading / splash screen
   if (isLoading || hasOnBoarded === null) {
     // Optional: show a splash or loader while checking
-    return <View style={{ flex: 1, backgroundColor: "#000" }} />;
+    return <Loading />;
   }
 
   return (
