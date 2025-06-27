@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import { Animated, Easing, Image, StyleSheet, View } from 'react-native'
 import { Colors } from '../constants/colors'
 
 const Loading = () => {
@@ -11,9 +11,10 @@ const Loading = () => {
         const spinAnimation = Animated.loop(
             Animated.timing(spinValue, {
                 toValue: 1,
-                duration: 1000,
-                useNativeDriver: true
-            })
+                duration: 5000,
+                useNativeDriver: true,
+                easing: Easing.linear // ensures smooth rotation
+            }),
         )
 
         // Pulsing text animation
@@ -59,7 +60,14 @@ const Loading = () => {
                         transform: [{ rotate: spin }]
                     }
                 ]}
-            />
+                resizeMode="contain"
+            >
+                <Image 
+                    source={require('../assets/ChikawaStaring.png')}
+                    style={{ width: '100%', height: '100%' }}
+                    resizeMode="contain"
+                />
+            </Animated.View>
 
             {/* Loading Text */}
             <Animated.Text
@@ -80,23 +88,20 @@ export default Loading
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: Colors.background,
-        justifyContent: 'center',
-        alignItems: 'center'
+    flex: 1,
+    backgroundColor: '#000000',
+    justifyContent: 'center',
+    alignItems: 'center',
     },
     loadingCircle: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        borderWidth: 4,
-        borderColor: '#333333',
-        borderTopColor: '#FFFFFF',
+        width: 100,
+        height: 100,
         marginBottom: 20,
     },
     loadingText: {
-        color: 'white',
+        color: '#FFFFFF',
         fontSize: 18,
-        fontWeight: '300'
-    }
+        fontWeight: '300',
+        letterSpacing: 0.7
+    },
 })

@@ -10,6 +10,7 @@ import RecentExpenseCard from '../components/RecentExpenseCard'
 import { ExpenseContext } from '../store/expense-context'
 import CustomizedButton from '../components/HomeUpdate/CustomizedButton'
 import Icon from 'react-native-vector-icons/Feather'
+import Loading from './Loading'
 
 const Home = ({navigation}) => {
     // Monthly Income by default is 0 if empty
@@ -175,6 +176,12 @@ const Home = ({navigation}) => {
         navigation.navigate("MonthlySummary") // Navigate to Monthly Summary Screen
     }
     console.log(welcomeMessage)
+    const isLoading = true
+    if (isLoading) {
+        return (
+            <Loading />
+        )
+    }
 
     return (
         <ScrollView
