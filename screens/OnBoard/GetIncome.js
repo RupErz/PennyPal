@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: 'center',
-      paddingTop: height * 0.2
+      paddingTop: height * 0.15
     },
     warningContainer: {
       flexDirection: 'row',
@@ -308,11 +308,11 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontFamily: "Monsterat_400Regular",
       textAlign: 'center',
-      marginHorizontal: 10,
+      marginHorizontal: 20,
     },
     errorMsgContainer: {
       height: 20,
-      marginTop: 40
+      marginTop: 40,
     },
     hintMessage: {
       color: Colors.grayFaded,

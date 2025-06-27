@@ -161,8 +161,8 @@ const Welcome = ({route, navigation}) => {
                             }
                         ]}
                     >
-                        <Title marginTop={20}>Track Smarter, Spend Better</Title>
-                        <Title>with PennyPal</Title>
+                        <Title marginTop={20} style={{fontSize: 26}}>"Track. Learn. Improve"</Title>
+                        <Title style={{fontSize: 26}}>with PennyPal</Title>
                     </Animated.View>
 
                     {/* Subtitle Section */}

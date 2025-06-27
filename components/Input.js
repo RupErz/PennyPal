@@ -29,11 +29,11 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     inputContainer: {
         width: '80%',
-        height: 50,
+        minHeight: 50, 
         backgroundColor: Colors.inputBackground,
         borderRadius: 10,
         paddingHorizontal: 20,
-        paddingVertical: 5,
+        paddingVertical: 7,
         marginVertical: 10,
         justifyContent: 'center',
     },
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         color: Colors.background,
         fontFamily: "Monsterat_400Regular",
         textAlign: 'left',
-        height: '100%',
-        fontWeight: 'normal'
+        fontWeight: 'normal',
+        textAlignVertical: 'center'
     }
 })

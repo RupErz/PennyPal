@@ -241,7 +241,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingVertical: 50
+        paddingBottom: 30,
+        paddingTop: 80
     },
     content: {
         flex: 1,
@@ -315,6 +316,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         alignItems: 'center',
-        paddingBottom: 30
+        paddingBottom: 30,
+        marginTop: 15
     }
 })
