@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { Colors } from '../../constants/colors'
 import CategoryTitle from './CategoryTitle'
 import ExpenseInput from './ExpenseInput'
@@ -36,7 +36,6 @@ const ManageExpensesForm  = ({defaultValue, onSubmit, submitButtonLabel, onDelet
     })
 
     console.log("Context is: ", context)
-
 
     // State for date picker
     const [showDatePicker, setShowDatePicker] = useState(false)
@@ -188,140 +187,165 @@ const ManageExpensesForm  = ({defaultValue, onSubmit, submitButtonLabel, onDelet
     const formIsInvalid = !inputs.title.isValid || !inputs.amount.isValid || !inputs.date.isValid || !inputs.category.isValid
 
     return (
-        <View style={styles.formContainer}>
-            {/* Getting the title of expense */}
-            <View style={styles.titleContainer}>
-                <CategoryTitle isValid={inputs.title.isValid}>Title</CategoryTitle>
-                <ExpenseInput 
-                    label={"Enter Your Expense Title"}
-                    textInputConfig={{
-                        value: inputs.title.value,
-                        onChangeText: inputChangeHandler.bind(this, 'title'),
-                        maxLength: 40,
-                        autoCapitalize:'words'
-                    }}
-                />
-            </View>
-            
-
-
-            {/* Getting amount */}
-            <View style={styles.rowContainer}>
-                <CategoryTitle isValid={inputs.amount.isValid}>Amount :</CategoryTitle>
-                <View style={styles.inputContainer}>
-                    <ExpenseInput 
-                        label={"Enter Your Amount"}
-                        textInputConfig={{
-                            value: inputs.amount.value,
-                            onChangeText: inputChangeHandler.bind(this, 'amount'),
-                            keyboardType: "decimal-pad",
-                        }}
-                    />
-                </View>
-            </View>
-            
-            {/* Getting the date */}
-            <View style={styles.dateSection}>
-                <View style={styles.rowContainer}>
-                    <CategoryTitle isValid={inputs.date.isValid}>Date :</CategoryTitle>
-                    <View style={styles.inputContainer}>
-                        <PickDateButton 
-                            date={inputs.date.value} 
-                            onPress={() => setShowDatePicker(true)} 
-                            label='YYYY-MM-DD'    
+        <KeyboardAvoidingView 
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+        >
+            <ScrollView 
+                style={styles.scrollContainer}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+            >
+                <View style={styles.formContainer}>
+                    {/* Getting the title of expense */}
+                    <View style={styles.titleContainer}>
+                        <CategoryTitle isValid={inputs.title.isValid}>Title</CategoryTitle>
+                        <ExpenseInput 
+                            label={"Enter Your Expense Title"}
+                            textInputConfig={{
+                                value: inputs.title.value,
+                                onChangeText: inputChangeHandler.bind(this, 'title'),
+                                maxLength: 40,
+                                autoCapitalize:'words'
+                            }}
                         />
                     </View>
-                </View>
+                    
+                    {/* Getting amount */}
+                    <View style={styles.rowContainer}>
+                        <CategoryTitle isValid={inputs.amount.isValid}>Amount :</CategoryTitle>
+                        <View style={styles.inputContainer}>
+                            <ExpenseInput 
+                                label={"Enter Your Amount"}
+                                textInputConfig={{
+                                    value: inputs.amount.value,
+                                    onChangeText: inputChangeHandler.bind(this, 'amount'),
+                                    keyboardType: "decimal-pad",
+                                }}
+                            />
+                        </View>
+                    </View>
+                    
+                    {/* Getting the date */}
+                    <View style={styles.dateSection}>
+                        <View style={styles.rowContainer}>
+                            <CategoryTitle isValid={inputs.date.isValid}>Date :</CategoryTitle>
+                            <View style={styles.inputContainer}>
+                                <PickDateButton 
+                                    date={inputs.date.value} 
+                                    onPress={() => setShowDatePicker(true)} 
+                                    label='YYYY-MM-DD'    
+                                />
+                            </View>
+                        </View>
 
-                {/* Button to auto fill current date for user */}
-                <View style={styles.dateButtonContainer}>
-                    <GetCurrentDateButton onPress={handleCurrentDatePress}>
-                        Get Current Date
-                    </GetCurrentDateButton>
-                </View>
-            </View>
+                        {/* Button to auto fill current date for user */}
+                        <View style={styles.dateButtonContainer}>
+                            <GetCurrentDateButton onPress={handleCurrentDatePress}>
+                                Get Current Date
+                            </GetCurrentDateButton>
+                        </View>
+                    </View>
 
-            {/* Date Picker Modal */}
-            {showDatePicker && (
-                <DateTimePicker
-                    value={getPickerDate()}
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
-                    maximumDate={new Date()} // Optional: prevent future dates
-                />
-            )}
+                    {/* Date Picker Modal */}
+                    {showDatePicker && (
+                        <DateTimePicker
+                            value={getPickerDate()}
+                            mode="date"
+                            display="default"
+                            onChange={handleDateChange}
+                            maximumDate={new Date()} // Optional: prevent future dates
+                        />
+                    )}
 
-            {/* Category with Smart Suggestions */}
-            <CategoryTitle isValid={inputs.category.isValid}>Category :</CategoryTitle>
-            <View style={styles.categoryContainer}>
-                <View style={styles.radioButtonContainer}>
-                    <RadioButton 
-                        inputs={inputs}
-                        category={"must"}
-                        onPress={() => {inputChangeHandler('category', "must")}}
-                        label={"Must Have"}
-                    />
-                    {suggestedCategory === "Must Have" && (
-                        <RecommendedText />
+                    {/* Category with Smart Suggestions */}
+                    <CategoryTitle isValid={inputs.category.isValid}>Category :</CategoryTitle>
+                    <View style={styles.categoryContainer}>
+                        <View style={styles.radioButtonContainer}>
+                            <RadioButton 
+                                inputs={inputs}
+                                category={"must"}
+                                onPress={() => {inputChangeHandler('category', "must")}}
+                                label={"Must Have"}
+                            />
+                            {suggestedCategory === "Must Have" && (
+                                <RecommendedText />
+                            )}
+                        </View>
+                        
+                        <View style={styles.radioButtonContainer}>
+                            <RadioButton 
+                                inputs={inputs}
+                                category={"nice"}
+                                onPress={() => {inputChangeHandler('category', "nice")}}
+                                label={"Nice to Have"}
+                            />
+                            {suggestedCategory === "Nice to Have" && (
+                                <RecommendedText />
+                            )}
+                        </View>
+
+                        <View style={styles.radioButtonContainer}>
+                            <RadioButton 
+                                inputs={inputs}
+                                category={"wasted"}
+                                onPress={() => {inputChangeHandler('category', "wasted")}}
+                                label={"Wasted"}
+                            />
+                            {suggestedCategory === "Wasted" && (
+                                <RecommendedText />
+                            )}
+                        </View>
+                    </View>
+
+                    {/* Alert about invalid input */}
+                    {formIsInvalid && (
+                        <Text style={styles.textAlert}>Invalid inputs, please check again.</Text>
+                    )}
+
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={submitHandler}>{submitButtonLabel}</PrimaryButton>
+                        <CancelButton>Cancel</CancelButton>
+                    </View>
+                    
+                    {isEdit && (
+                        <View style={styles.deleteContainer}>
+                            <IconButton
+                                name={'trash'}
+                                color={Colors.redSmooth}
+                                size={40}
+                                onPress={onDelete}
+                            />
+                        </View>
                     )}
                 </View>
-                
-                <View style={styles.radioButtonContainer}>
-                    <RadioButton 
-                        inputs={inputs}
-                        category={"nice"}
-                        onPress={() => {inputChangeHandler('category', "nice")}}
-                        label={"Nice to Have"}
-                    />
-                    {suggestedCategory === "Nice to Have" && (
-                        <RecommendedText />
-                    )}
-                </View>
-
-                <View style={styles.radioButtonContainer}>
-                    <RadioButton 
-                        inputs={inputs}
-                        category={"wasted"}
-                        onPress={() => {inputChangeHandler('category', "wasted")}}
-                        label={"Wasted"}
-                    />
-                    {suggestedCategory === "Wasted" && (
-                        <RecommendedText />
-                    )}
-                </View>
-            </View>
-
-            {/* Alert about invalid input */}
-            {formIsInvalid && (
-                <Text style={styles.textAlert}>Invalid inputs, please check again.</Text>
-            )}
-
-
-            <View style={styles.buttonContainer}>
-                <PrimaryButton onPress={submitHandler}>{submitButtonLabel}</PrimaryButton>
-                <CancelButton>Cancel</CancelButton>
-            </View>
-            {isEdit && (
-                <View style={styles.deleteContainer}>
-                    <IconButton
-                        name={'trash'}
-                        color={Colors.redSmooth}
-                        size={40}
-                        onPress={onDelete}
-                    />
-                </View>
-            )}
-        </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 
 export default ManageExpensesForm 
-const {width} = Dimensions.get('window')
+
+const {width, height} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    scrollContainer: {
+        flex: 1,
+    },
+    scrollContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 20,
+        minHeight: height * 0.8, // Ensures content takes up enough space
+    },
     formContainer: {
-        width: 0.9 * width,
+        width: Math.min(0.9 * width, 400), // Cap max width for tablets
         justifyContent: 'center',
         backgroundColor: Colors.cardBackground,
         paddingVertical: 25,

@@ -17,10 +17,13 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 20, 
     },
     title: {
         fontSize: 30, // or 24
         color: Colors.title,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center',
+        flexWrap: 'wrap'
     },
 })

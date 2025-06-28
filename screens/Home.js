@@ -10,6 +10,7 @@ import RecentExpenseCard from '../components/RecentExpenseCard'
 import { ExpenseContext } from '../store/expense-context'
 import CustomizedButton from '../components/HomeUpdate/CustomizedButton'
 import Icon from 'react-native-vector-icons/Feather'
+import Loading from './Loading'
 
 const Home = ({navigation}) => {
     // Monthly Income by default is 0 if empty
@@ -174,7 +175,6 @@ const Home = ({navigation}) => {
     const onPressViewAll = () => {
         navigation.navigate("MonthlySummary") // Navigate to Monthly Summary Screen
     }
-    console.log(welcomeMessage)
 
     return (
         <ScrollView
@@ -259,9 +259,9 @@ const Home = ({navigation}) => {
                 )}
 
                 {/* Button to clear expense data */}
-                <Button title='Press me to clear' onPress={clearData} style={{marginTop: 50}}/>
+                {/* <Button title='Press me to clear' onPress={clearData} style={{marginTop: 50}}/> */}
                 {/* Button to clear entire progress to go back OnBoarding */}
-                <Button title='Press me to go back onBoarding' onPress={clearUserData} />
+                {/* <Button title='Press me to go back onBoarding' onPress={clearUserData} /> */}
             </Animated.View>
         </ScrollView>
         
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 8,
         borderLeftWidth: 4,
-        marginBottom: 8
+        marginBottom: 18
     },
     motivationalsuccess: {
         backgroundColor: '#E8F5E8',

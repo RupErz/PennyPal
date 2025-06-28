@@ -10,7 +10,13 @@ const CategorySlot = ({category, amount, percentage, catEmoji}) => {
                 , category === 'Must Have' && {color: Colors.must}
                 , category === 'Nice to Have' && {color: Colors.nice}
                 , category === 'Wasted' && {color: Colors.wasted}
-            ]}>{category}</Text>
+            ]}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
+                minimumFontScale={0.8}
+            >
+                {category}
+            </Text>
             <Text style={styles.categoryAmount}>{amount}</Text>
             <Text style={styles.categoryPercentage}>{percentage}</Text>
         </View>
@@ -35,7 +41,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.05,
         shadowRadius: 2,
-        minHeight: 100 // Ensure a consistent height
+        minHeight: 100, // Ensure a consistent height
+        minWidth: 90
     },
     categoryEmoji: {
         fontSize: 27,

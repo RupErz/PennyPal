@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useEffect, useState } from "react";
+import Loading from "../screens/Loading";
 
 export const ExpenseContext = createContext({
     expenses: [],
@@ -576,7 +577,7 @@ export const ExpenseContextProvider = ({children}) => {
                 getAnalyticsData
             }}
         >
-            {children}
+            {isLoading ? <Loading /> : children}
         </ExpenseContext.Provider>
     )
 }
