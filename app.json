@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/logo/AppLogoSquare.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/logo/SplashScreen.png",
       "resizeMode": "contain",
