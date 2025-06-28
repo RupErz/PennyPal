@@ -126,7 +126,6 @@ const MonthlySummary = ({navigation, route, context}) => {
 
         {/* Saving Rate */}
         <View>
-
         </View>
       </View>
 

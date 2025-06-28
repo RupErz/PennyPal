@@ -17,7 +17,6 @@ const Home = ({navigation}) => {
     const {userName, monthlyIncome} = useContext(UserContext)
     const {getExpensesByMonth, getTotalExpensesByMonth, getExpensesByCategory} = useContext(ExpenseContext)
 
-    console.log("User income: ", monthlyIncome)
     const [welcomeMessage, setWelcomeMessage] = useState("")    
 
     // Get total expense for the CURRENT month
@@ -260,9 +259,9 @@ const Home = ({navigation}) => {
                 )}
 
                 {/* Button to clear expense data */}
-                <Button title='Press me to clear' onPress={clearData} style={{marginTop: 50}}/>
+                {/* <Button title='Press me to clear' onPress={clearData} style={{marginTop: 50}}/> */}
                 {/* Button to clear entire progress to go back OnBoarding */}
-                <Button title='Press me to go back onBoarding' onPress={clearUserData} />
+                {/* <Button title='Press me to go back onBoarding' onPress={clearUserData} /> */}
             </Animated.View>
         </ScrollView>
         
@@ -364,7 +363,7 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 8,
         borderLeftWidth: 4,
-        marginBottom: 8
+        marginBottom: 18
     },
     motivationalsuccess: {
         backgroundColor: '#E8F5E8',
