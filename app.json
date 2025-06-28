@@ -18,12 +18,12 @@
     },
     "android": {
       "versionCode": 1,
-      "package": "com.rupertzz.pennypal",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.rupertzz.PennyPal"
     },
     "web": {
       "favicon": "./assets/favicon.png"
